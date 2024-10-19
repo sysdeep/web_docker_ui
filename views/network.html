@@ -1,0 +1,82 @@
+{{ template "base" . }} {{define "content"}}
+
+<h1>
+  <i class="fa fa-sitemap" aria-hidden="true"></i>
+
+  Network: {{ .Network.Name }}
+</h1>
+
+<div>
+  <h2>Network details</h2>
+  <div>
+    <table>
+      <tbody>
+        <tr>
+          <td>ID</td>
+          <td>{{ .Network.ID }}</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>{{ .Network.Name }}</td>
+        </tr>
+        <tr>
+          <td>Created</td>
+          <td>{{ .Network.Created }}</td>
+        </tr>
+        <tr>
+          <td>Driver</td>
+          <td>{{ .Network.Driver }}</td>
+        </tr>
+        <tr>
+          <td>Scope</td>
+          <td>{{ .Network.Scope }}</td>
+        </tr>
+        <tr>
+          <td>Internal</td>
+          <td>{{ .Network.Internal }}</td>
+        </tr>
+        <tr>
+          <td>Attachable</td>
+          <td>{{ .Network.Attachable }}</td>
+        </tr>
+        <tr>
+          <td>Ingress</td>
+          <td>{{ .Network.Ingress }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <h2>Containers</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Mac</th>
+            <th>Ip</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Network.Containers }}
+          <tr>
+            <td>
+              <a href="/containers/{{ .ID }}"> {{ .Name }} </a>
+            </td>
+            <td>{{ .MacAddress }}</td>
+            <td>{{ .IPv4Address }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <!-- <a href="/volumes/actions/remove/{{ . }}" class="button error"> -->
+      <!--   <i class="fa fa-trash-o" aria-hidden="true"></i> -->
+      <!--   Remove -->
+      <!-- </a> -->
+    </div>
+  </div>
+</div>
+
+{{end}}
