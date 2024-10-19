@@ -7,6 +7,7 @@ import { useConfiguration } from '@src/store/configuration';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import RepositoryFrame from './repository_frame';
+import RepositoryNavFrame from '../components/reposytory_nav_frame';
 
 export default function RepositoryPage() {
   const { id } = useParams();
@@ -55,17 +56,16 @@ export default function RepositoryPage() {
 
   const on_tag_remove = (tag: string) => {
     console.log('tag remove page: ' + tag);
-    // if (secret) {
-    //   secret_service
-    //     .remove_secret(id)
-    //     .then(() => {
-    //       console.log('remove ok');
-    //       navigate(route.secrets);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // }
+    if (repository) {
+      registry_service
+        .remove_tag(repository.id, tag)
+        .then(() => {
+          refresh();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const page_name = repository ? repository.name : id;
@@ -73,6 +73,8 @@ export default function RepositoryPage() {
   return (
     <div>
       <PageTitle>Repository: {page_name}</PageTitle>
+      {repository && <RepositoryNavFrame repository={repository} />}
+
       {repository && (
         <RepositoryFrame
           repository={repository}

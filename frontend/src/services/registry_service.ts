@@ -46,12 +46,18 @@ export class RegistryService {
     await fetch(
       join_url(
         this.base_url,
-        `/api/registry/repository/${reposytory_id}/${tag}`,
+        `/api/registry/repository_tag/${reposytory_id}/${tag}`,
       ),
       {
         method: 'DELETE',
       },
     );
+  }
+
+  async registry_action(action: number): Promise<void> {
+    await fetch(join_url(this.base_url, `/api/registry/action/${action}`), {
+      method: 'POST',
+    });
   }
 }
 
@@ -90,4 +96,9 @@ type DescriptorManifest = {
   media_type: string;
   size: number;
   digest: string;
+};
+
+export const RegistryAction: { [id: string]: number } = {
+  garbage: 1,
+  restart: 2,
 };

@@ -8,11 +8,14 @@ import { useConfiguration } from '@src/store/configuration';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import DetailsFrame from './details_frame';
+import RepositoryNavFrame from '../components/reposytory_nav_frame';
+import ButtonRemove from '@src/components/button_remove';
+import { join_url, route } from '@src/routes';
 // import RepositoryFrame from './repository_frame';
 
 export default function RepositoryTagPage() {
   const { id, tag } = useParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { configuration } = useConfiguration();
 
   const registry_service = useMemo(() => {
@@ -40,7 +43,7 @@ export default function RepositoryTagPage() {
   useEffect(() => {
     console.log('page repository tag mounted');
     refresh();
-  }, []);
+  }, [tag]);
 
   // const on_repository_remove = () => {
   //   console.log('repo remove page');
@@ -57,41 +60,38 @@ export default function RepositoryTagPage() {
   //   // }
   // };
 
-  // const on_tag_remove = (tag: string) => {
-  //   console.log('tag remove page: ' + tag);
-  //   // if (secret) {
-  //   //   secret_service
-  //   //     .remove_secret(id)
-  //   //     .then(() => {
-  //   //       console.log('remove ok');
-  //   //       navigate(route.secrets);
-  //   //     })
-  //   //     .catch((err) => {
-  //   //       console.log(err);
-  //   //     });
-  //   // }
-  // };
+  const on_tag_remove = () => {
+    if (id && tag) {
+      registry_service
+        .remove_tag(id, tag)
+        .then(() => {
+          navigate(join_url(route.registry_repository, id));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
-  // const page_name = repository ? repository.name : id;
+  let page_name = '';
+  if (repository && manifest) {
+    page_name = `${repository.name}:${manifest.name}`;
+  }
 
   return (
     <div>
-      <PageTitle>Repository tag: ----- </PageTitle>
-      <div>{id}</div>
-      <div>{tag}</div>
+      <PageTitle> {page_name}</PageTitle>
+
+      {repository && <RepositoryNavFrame repository={repository} />}
 
       {manifest && repository && (
         <DetailsFrame manifest={manifest} repository={repository} />
       )}
-      {/* <PageTitle>Repository: {page_name}</PageTitle>
-      {repository && (
-        <RepositoryFrame
-          repository={repository}
-          on_repository_remove={on_repository_remove}
-          on_tag_remove={on_tag_remove}
-        />
-      )}
-      {!repository && <div>error</div>} */}
+
+      {/* actions */}
+      <div>
+        <ButtonRemove on_remove={on_tag_remove} />
+      </div>
     </div>
   );
 }

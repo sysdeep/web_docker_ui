@@ -37,11 +37,6 @@ export default function RepositoryFrame({
 
   return (
     <div>
-      <ul>
-        <li>repository: {repository.name}</li>
-        <li>tags: {tags_view}</li>
-      </ul>
-
       <ButtonRemove on_remove={on_repository_remove} />
 
       <TagsTable repository={repository} on_remove={on_tag_remove} />

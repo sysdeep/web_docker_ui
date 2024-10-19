@@ -117,7 +117,12 @@ func (c *RegistryClient) GetRepository(id string) (RepositoryModel, error) {
 		return RepositoryModel{}, err
 	}
 
-	return newRepositoryModel(result.Name, result.Tags), nil
+	tags_result := []string{}
+	if result.Tags != nil {
+		tags_result = result.Tags
+	}
+
+	return newRepositoryModel(result.Name, tags_result), nil
 
 }
 
@@ -177,7 +182,12 @@ func (c *RegistryClient) GetManivestV2(id string, tag_name string) (ManifestV2, 
 // A digest can be fetched from manifest get response header 'docker-content-digest'
 // после удаления необходимо выполнить чистку
 // docker exec -it registry bin/registry garbage-collect  /etc/docker/registry/config.yml
-func (c *RegistryClient) RemoveManifest(image_name string, digest string) error {
+func (c *RegistryClient) RemoveManifest(id string, digest string) error {
+	// convert id to name
+	image_name, err := id2name(id)
+	if err != nil {
+		return err
+	}
 	// curl -v --silent -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
 	// -X DELETE http://127.0.0.1:5000/v2/ubuntu/manifests/sha256:7cc0576c7c0ec2384de5cbf245f41567e922aab1b075f3e8ad565f508032df17
 	slog.Info("RemoveManifest", image_name, digest)
