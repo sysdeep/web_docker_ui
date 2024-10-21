@@ -11,6 +11,7 @@ import DetailsFrame from './details_frame';
 import RepositoryNavFrame from '../components/reposytory_nav_frame';
 import ButtonRemove from '@src/components/button_remove';
 import { join_url, route } from '@src/routes';
+import IconRegistry from '@src/components/icon_registry';
 // import RepositoryFrame from './repository_frame';
 
 export default function RepositoryTagPage() {
@@ -80,7 +81,9 @@ export default function RepositoryTagPage() {
 
   return (
     <div>
-      <PageTitle> {page_name}</PageTitle>
+      <PageTitle>
+        <IconRegistry /> {page_name}
+      </PageTitle>
 
       {repository && <RepositoryNavFrame repository={repository} />}
 

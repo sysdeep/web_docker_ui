@@ -9,6 +9,7 @@ import { useConfiguration } from '@src/store/configuration';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ActionsBar from './actions_bar';
+import IconRegistry from '@src/components/icon_registry';
 
 export default function RepositoriesPage() {
   const { configuration } = useConfiguration();
@@ -48,7 +49,9 @@ export default function RepositoriesPage() {
 
   return (
     <div>
-      <PageTitle>Repositories</PageTitle>
+      <PageTitle>
+        <IconRegistry /> Repositories
+      </PageTitle>
 
       <ActionsBar on_garbage={on_garbage} on_restart={on_restart} />
 

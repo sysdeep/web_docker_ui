@@ -208,7 +208,7 @@ func (h *Api) GetContainer(c echo.Context) error {
 	// fmt.Printf("network: \n\t%+v\n", inspect_data.NetworkSettings)
 	// fmt.Printf("networks: \n\t%+v\n", inspect_data.NetworkSettings.Networks)
 
-	var mount_points []mountPoint
+	mount_points := []mountPoint{}
 	for _, mp := range inspect_data.Mounts {
 		mount_points = append(mount_points, make_container_mount_point_view(mp))
 	}

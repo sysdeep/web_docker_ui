@@ -1,4 +1,4 @@
-package api
+package registry_handler
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 )
 
 // handler
-func (h *Api) RemoveRegistryRepositoryTag(c echo.Context) error {
+func (h *RegistryHandler) RemoveRegistryRepositoryTag(c echo.Context) error {
 
 	id := c.Param("id")
 	tag := c.Param("tag")
@@ -22,5 +22,5 @@ func (h *Api) RemoveRegistryRepositoryTag(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	return c.JSON(http.StatusOK, stdResponse{status: true})
+	return c.JSON(http.StatusOK, nullResponse{})
 }

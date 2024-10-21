@@ -38,6 +38,28 @@ export default class ContainersService {
     const data = (await response.json()) as ApiContainerResponseModel;
     return data;
   }
+
+  async get_container_top(id: string): Promise<ContainerTopModel> {
+    const response = await fetch(
+      join_url(this.base_url, '/api/container_top/' + id),
+    );
+    const data = (await response.json()) as ContainerTopResponse;
+    return data.top;
+  }
+
+  async container_action(id: string, action: string): Promise<void> {
+    const send_data = {
+      id: id,
+      action: action,
+    };
+    await fetch(join_url(this.base_url, '/api/container_action'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(send_data),
+    });
+  }
 }
 
 interface ApiContainerModel {
@@ -85,3 +107,23 @@ export interface ApiContainerResponseModel {
   config: ApiContainerConfigModel;
   network: ApiContainerNetworkModel;
 }
+
+export const ContainerAction: { [id: string]: string } = {
+  start: 'start',
+  stop: 'stop',
+  kill: 'kill',
+  restart: 'restart',
+  pause: 'pause',
+  resume: 'resume',
+  remove: 'remove',
+};
+
+// container top --------------------------------------------------------------
+type ContainerTopResponse = {
+  top: ContainerTopModel;
+};
+
+export type ContainerTopModel = {
+  processes: string[][];
+  titles: string[];
+};

@@ -1,4 +1,4 @@
-package api
+package registry_handler
 
 import (
 	"hdu/internal/registry_client"
@@ -8,7 +8,7 @@ import (
 )
 
 // handler
-func (h *Api) GetRegistryRepositoryTag(c echo.Context) error {
+func (h *RegistryHandler) GetRegistryRepositoryTag(c echo.Context) error {
 
 	id := c.Param("id")
 	tag := c.Param("tag")

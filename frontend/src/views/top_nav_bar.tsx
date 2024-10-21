@@ -8,6 +8,7 @@ import IconConfigs from '../components/icon_configs';
 import IconSecrets from '../components/icon_secrets';
 import IconHome from '../components/icon_home';
 import { route } from '../routes';
+import IconRegistry from '@src/components/icon_registry';
 
 export default function TopNavBar() {
   return (
@@ -66,7 +67,7 @@ export default function TopNavBar() {
             </li>
             <li className='nav-item'>
               <Link to={route.registry_repositories} className='nav-link'>
-                Registry
+                <IconRegistry /> Registry
               </Link>
             </li>
           </ul>

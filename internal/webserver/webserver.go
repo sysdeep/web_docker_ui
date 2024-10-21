@@ -6,6 +6,7 @@ import (
 	"hdu/internal/services"
 	"hdu/internal/webserver/api"
 	"hdu/internal/webserver/handlers"
+	"hdu/internal/webserver/registry_handler"
 
 	"github.com/docker/docker/client"
 	"github.com/labstack/echo/v4"
@@ -47,8 +48,9 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	// e.Renderer = t
 	e.Renderer = tplr
 
+	// NOTE: not used for api
 	// setup custom error renderer
-	e.HTTPErrorHandler = customHTTPErrorHandler
+	// e.HTTPErrorHandler = customHTTPErrorHandler
 
 	hndls := handlers.NewHandlers(docker, services, logger)
 
@@ -93,6 +95,8 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	// containers
 	e.GET("/api/containers", api_handlers.GetContainers)
 	e.GET("/api/containers/:id", api_handlers.GetContainer)
+	e.GET("/api/container_top/:id", api_handlers.GetContainerTop)
+	e.POST("/api/container_action", api_handlers.ContainerAction)
 
 	// images
 	e.GET("/api/images", api_handlers.GetImages)
@@ -123,11 +127,12 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	e.GET("/api/info", api_handlers.GetInfo)
 
 	// registry
-	e.GET("/api/registry/repositories", api_handlers.GetRegistryRepositories)
-	e.GET("/api/registry/repository/:id", api_handlers.GetRegistryRepository)
-	e.GET("/api/registry/repository_tag/:id/:tag", api_handlers.GetRegistryRepositoryTag)
-	e.DELETE("/api/registry/repository_tag/:id/:tag", api_handlers.RemoveRegistryRepositoryTag)
-	e.POST("/api/registry/action/:action", api_handlers.RegistryAction)
+	reg_handler := registry_handler.NewRegistryHandler(docker, registry_client)
+	e.GET("/api/registry/repositories", reg_handler.GetRegistryRepositories)
+	e.GET("/api/registry/repository/:id", reg_handler.GetRegistryRepository)
+	e.GET("/api/registry/repository_tag/:id/:tag", reg_handler.GetRegistryRepositoryTag)
+	e.DELETE("/api/registry/repository_tag/:id/:tag", reg_handler.RemoveRegistryRepositoryTag)
+	e.POST("/api/registry/action/:action", reg_handler.RegistryAction)
 
 	return &Webserver{
 		e: e,

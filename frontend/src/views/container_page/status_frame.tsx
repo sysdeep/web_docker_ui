@@ -1,5 +1,6 @@
 import React from 'react';
 import { ApiContainerResponseModel } from '../../services/containers_service';
+import { format_date } from '@src/utils/humanize';
 
 interface StatusFrameProps {
   container: ApiContainerResponseModel;
@@ -36,11 +37,11 @@ export default function StatusFrame({ container }: StatusFrameProps) {
             </tr>
             <tr>
               <td>Created</td>
-              <td>{container.container.created} </td>
+              <td>{format_date(container.container.created)}</td>
             </tr>
             <tr>
               <td>Start time</td>
-              <td>{container.state.started}</td>
+              <td>{format_date(container.state.started)}</td>
             </tr>
             <tr>
               <td>RestartCount</td>

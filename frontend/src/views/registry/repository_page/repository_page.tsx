@@ -8,6 +8,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import RepositoryFrame from './repository_frame';
 import RepositoryNavFrame from '../components/reposytory_nav_frame';
+import IconRegistry from '@src/components/icon_registry';
 
 export default function RepositoryPage() {
   const { id } = useParams();
@@ -72,7 +73,9 @@ export default function RepositoryPage() {
 
   return (
     <div>
-      <PageTitle>Repository: {page_name}</PageTitle>
+      <PageTitle>
+        <IconRegistry /> Repository: {page_name}
+      </PageTitle>
       {repository && <RepositoryNavFrame repository={repository} />}
 
       {repository && (

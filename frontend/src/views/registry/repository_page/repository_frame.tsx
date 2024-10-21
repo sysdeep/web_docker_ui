@@ -37,7 +37,8 @@ export default function RepositoryFrame({
 
   return (
     <div>
-      <ButtonRemove on_remove={on_repository_remove} />
+      {/* TODO */}
+      {/* <ButtonRemove on_remove={on_repository_remove} /> */}
 
       <TagsTable repository={repository} on_remove={on_tag_remove} />
     </div>

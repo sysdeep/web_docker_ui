@@ -20,6 +20,7 @@
 - https://jenil.github.io/chota
 - https://prettier.io/docs/en/options
 - https://vonheikemen.github.io/devlog/tools/how-to-survive-without-multiple-cursors-in-vim/
+- registry v2 api - https://distribution.github.io/distribution/
 
 ### favicon
 

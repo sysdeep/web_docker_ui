@@ -1,4 +1,4 @@
-package api
+package registry_handler
 
 import (
 	"hdu/internal/registry_client"
@@ -8,9 +8,9 @@ import (
 )
 
 // handler
-func (h *Api) GetRegistryRepositories(c echo.Context) error {
+func (h *RegistryHandler) GetRegistryRepositories(c echo.Context) error {
 
-	catalog, err := h.registry_client.GetCatalog(10)
+	catalog, err := h.registry_client.GetCatalog(10000)
 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)

@@ -1,52 +1,65 @@
+import { ContainerAction } from '@src/services/containers_service';
 import React from 'react';
 
-interface ActionsFrameProps {
-  id: string;
-}
-export default function ActionsFrame({ id }: ActionsFrameProps) {
+type ActionsFrameProps = {
+  status: string;
+  on_action(action: string): void;
+};
+
+export default function ActionsFrame({ status, on_action }: ActionsFrameProps) {
+  const start_classes = status === 'running' ? 'disabled' : '';
+  const stop_classes = status === 'exited' ? 'disabled' : '';
+
+  // const on_start_clicked = () => {
+  //   console.log('start');
+  // };
+
   return (
     <div className='box'>
       <h2>Actions</h2>
       <div>
-        <a
-          className='btn btn-secondary mx-2'
-          href='/container/{id}/action/start'
+        <button
+          className={'btn btn-secondary mx-2 ' + start_classes}
+          onClick={() => on_action(ContainerAction.start)}
         >
-          Start TODO
-        </a>
-        <a className='btn btn-secondary' href='/container/{id}/action/stop'>
-          Stop TODO
-        </a>
-        <a
+          <i className='bi bi-play-fill'></i> Start
+        </button>
+        <button
+          className={'btn btn-secondary ' + stop_classes}
+          onClick={() => on_action(ContainerAction.stop)}
+        >
+          <i className='bi bi-stop-fill'></i> Stop
+        </button>
+        <button
           className='btn btn-secondary mx-2'
-          href='/container/{id}/action/kill'
+          onClick={() => on_action(ContainerAction.kill)}
         >
           Kill TODO
-        </a>
-        <a
+        </button>
+        <button
           className='btn btn-secondary mx-2'
-          href='/container/{id}/action/restart'
+          onClick={() => on_action(ContainerAction.restart)}
         >
           Restart TODO
-        </a>
-        <a
+        </button>
+        <button
           className='btn btn-secondary mx-2'
-          href='/container/{id}/action/pause'
+          onClick={() => on_action(ContainerAction.pause)}
         >
           Pause TODO
-        </a>
-        <a
+        </button>
+        <button
           className='btn btn-secondary mx-2'
-          href='/container/{id}/action/resume'
+          onClick={() => on_action(ContainerAction.resume)}
         >
           Resume TODO
-        </a>
-        <a
+        </button>
+        <button
           className='btn btn-secondary mx-2'
-          href='/container/{id}/action/remove'
+          onClick={() => on_action(ContainerAction.remove)}
         >
           Remove TODO
-        </a>
+        </button>
       </div>
     </div>
   );
