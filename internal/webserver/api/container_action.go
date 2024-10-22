@@ -24,6 +24,16 @@ func (h *Api) ContainerAction(c echo.Context) error {
 		action_error = actionStopContainer(h.docker_client, request.ID)
 	case "start":
 		action_error = actionStartContainer(h.docker_client, request.ID)
+	case "restart":
+		action_error = actionRestartContainer(h.docker_client, request.ID)
+	case "kill":
+		action_error = actionKillContainer(h.docker_client, request.ID)
+	case "pause":
+		action_error = actionPauseContainer(h.docker_client, request.ID)
+	case "resume":
+		action_error = actionUnpauseContainer(h.docker_client, request.ID)
+	case "remove":
+		action_error = actionRemoveContainer(h.docker_client, request.ID)
 	}
 
 	if action_error != nil {
@@ -55,12 +65,6 @@ type containerActionRequest struct {
 func actionStopContainer(docker_client *client.Client, id string) error {
 	slog.Info("container action stop: " + id)
 
-	// NOTE: example top
-	// top_options := []string{}
-	// aaa, err := docker_client.ContainerTop(context.Background(), id, top_options)
-	// fmt.Println(aaa)
-	// fmt.Println(err)
-
 	stop_options := container.StopOptions{}
 	return docker_client.ContainerStop(context.Background(), id, stop_options)
 }
@@ -70,4 +74,40 @@ func actionStartContainer(docker_client *client.Client, id string) error {
 
 	start_options := container.StartOptions{}
 	return docker_client.ContainerStart(context.Background(), id, start_options)
+}
+
+func actionKillContainer(docker_client *client.Client, id string) error {
+	slog.Info("container action kill: " + id)
+
+	return docker_client.ContainerKill(context.Background(), id, "SIGKILL")
+}
+
+func actionRestartContainer(docker_client *client.Client, id string) error {
+	slog.Info("container action restart: " + id)
+
+	stop_options := container.StopOptions{}
+	return docker_client.ContainerRestart(context.Background(), id, stop_options)
+}
+
+func actionPauseContainer(docker_client *client.Client, id string) error {
+	slog.Info("container action pause: " + id)
+
+	return docker_client.ContainerPause(context.Background(), id)
+}
+
+func actionUnpauseContainer(docker_client *client.Client, id string) error {
+	slog.Info("container action unpause: " + id)
+
+	return docker_client.ContainerUnpause(context.Background(), id)
+}
+
+func actionRemoveContainer(docker_client *client.Client, id string) error {
+	slog.Info("container action remove: " + id)
+
+	remove_options := container.RemoveOptions{
+		RemoveVolumes: false,
+		RemoveLinks:   false,
+		Force:         false,
+	}
+	return docker_client.ContainerRemove(context.Background(), id, remove_options)
 }

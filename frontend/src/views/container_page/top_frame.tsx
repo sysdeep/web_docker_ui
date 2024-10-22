@@ -1,21 +1,52 @@
-import { ContainerTopModel } from '@src/services/containers_service';
-import React from 'react';
+import ButtonRefresh from '@src/components/button_refresh';
+import ContainersService, { ApiContainerResponseModel, ContainerTopModel } from '@src/services/containers_service';
+import React, { useEffect, useState } from 'react';
 
 type TopFrameProps = {
-  top_model: ContainerTopModel | null;
+  container: ApiContainerResponseModel | null;
+  containers_service: ContainersService;
 };
 
-export default function TopFrame({ top_model }: TopFrameProps) {
-  if (top_model === null) {
-    return (
-      <div className='box'>
-        <h2>Top</h2>
-        <p>no data</p>
-      </div>
-    );
-  }
+export default function TopFrame({ container, containers_service }: TopFrameProps) {
+  // state --------------------------------------------------------------------
+  const [loading, setLoading] = useState<boolean>(false);
+  const [containerTop, setContainerTop] = useState<ContainerTopModel | null>(null);
 
-  const headers_view = top_model.titles.map((title, idx) => {
+  const refresh_top = () => {
+    if (container.state.status === 'running') {
+      setLoading(true);
+      containers_service
+        .get_container_top(container.container.id)
+        .then(setContainerTop)
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
+    } else {
+      setContainerTop(null);
+    }
+  };
+
+  useEffect(() => {
+    refresh_top();
+  }, [container]);
+
+  // view ---------------------------------------------------------------------
+  return (
+    <div className='box'>
+      <h2>Top</h2>
+
+      {containerTop && <ProcessesTable containerTop={containerTop} />}
+      {containerTop && <ButtonRefresh on_refresh={refresh_top} loading={loading} />}
+      {!containerTop && <p>no data</p>}
+    </div>
+  );
+}
+
+// table view -----------------------------------------------------------------
+type ProcessesViewProps = {
+  containerTop: ContainerTopModel;
+};
+function ProcessesTable({ containerTop }: ProcessesViewProps) {
+  const headers_view = containerTop.titles.map((title, idx) => {
     return <th key={idx}>{title}</th>;
   });
 
@@ -25,19 +56,16 @@ export default function TopFrame({ top_model }: TopFrameProps) {
     });
   };
 
-  const body_view = top_model.processes.map((procs, idx) => {
+  const body_view = containerTop.processes.map((procs, idx) => {
     return <tr key={idx}>{body_row(procs)}</tr>;
   });
 
   return (
-    <div className='box'>
-      <h2>Top</h2>
-      <table className='table table-sm'>
-        <thead>
-          <tr>{headers_view}</tr>
-        </thead>
-        <tbody>{body_view}</tbody>
-      </table>
-    </div>
+    <table className='table table-sm'>
+      <thead>
+        <tr>{headers_view}</tr>
+      </thead>
+      <tbody>{body_view}</tbody>
+    </table>
   );
 }
