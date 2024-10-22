@@ -32,17 +32,20 @@ export default class ContainersService {
   // }
 
   async get_container(id: string): Promise<ApiContainerResponseModel> {
-    const response = await fetch(
-      join_url(this.base_url, '/api/containers/' + id),
-    );
+    const response = await fetch(join_url(this.base_url, '/api/containers/' + id));
     const data = (await response.json()) as ApiContainerResponseModel;
     return data;
   }
 
   async get_container_top(id: string): Promise<ContainerTopModel> {
-    const response = await fetch(
-      join_url(this.base_url, '/api/container_top/' + id),
-    );
+    const response = await fetch(join_url(this.base_url, '/api/container_top/' + id));
+    const data = (await response.json()) as ContainerTopResponse;
+    return data.top;
+  }
+
+  async get_container_stats(id: string): Promise<ContainerTopModel> {
+    const response = await fetch(join_url(this.base_url, '/api/container_stats/' + id));
+    console.log(response.json());
     const data = (await response.json()) as ContainerTopResponse;
     return data.top;
   }

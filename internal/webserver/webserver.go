@@ -96,6 +96,7 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	e.GET("/api/containers", api_handlers.GetContainers)
 	e.GET("/api/containers/:id", api_handlers.GetContainer)
 	e.GET("/api/container_top/:id", api_handlers.GetContainerTop)
+	e.GET("/api/container_stats/:id", api_handlers.GetContainerStats)
 	e.POST("/api/container_action", api_handlers.ContainerAction)
 
 	// images

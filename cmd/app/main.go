@@ -5,13 +5,17 @@ import (
 	"hdu/internal/registry_client"
 	"hdu/internal/services"
 	"hdu/internal/webserver"
+	"log/slog"
 
 	"github.com/docker/docker/client"
 )
 
 func main() {
+
+	slog.SetLogLoggerLevel(slog.LevelDebug)
+
 	log := logger.NewLogger()
-	log.Info("start")
+	slog.Info("start")
 
 	// test docker
 

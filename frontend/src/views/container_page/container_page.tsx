@@ -13,6 +13,7 @@ import { useConfiguration } from '@src/store/configuration';
 import ButtonRefresh from '@src/components/button_refresh';
 import TopFrame from './top_frame';
 import { route } from '@src/routes';
+import StatsFrame from './stats_frame';
 
 export default function ContainerPage() {
   const { id } = useParams();
@@ -70,6 +71,7 @@ export default function ContainerPage() {
         <StatusFrame container={container} />
 
         <TopFrame container={container} containers_service={containers_service} />
+        <StatsFrame container={container} containers_service={containers_service} />
 
         <DetailsFrame container={container} />
         <NetworksFrame container={container} />
