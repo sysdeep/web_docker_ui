@@ -1,5 +1,6 @@
 import { join_url } from '@src/routes';
 import ImageListModel from '../models/image_list_model';
+import { ApiContainerListModel } from '@src/models/api_container_list_model';
 
 export default class ImagesService {
   private base_url: string;
@@ -29,9 +30,9 @@ export default class ImagesService {
   }
 
   async get_image(id: string): Promise<ApiFullImageModel> {
-    const response = (await fetch(
-      join_url(this.base_url, '/api/images/' + id),
-    ).then((data) => data.json())) as ApiFullImageModel;
+    const response = (await fetch(join_url(this.base_url, '/api/images/' + id)).then((data) =>
+      data.json(),
+    )) as ApiFullImageModel;
 
     return response;
   }
@@ -71,17 +72,14 @@ interface ApiImageModel {
 
 interface ApiImageHistoryModel {
   created: string;
+  created_by: string;
   id: string;
   size: number;
   tags: string[];
-}
-interface ApiImageContainerModel {
-  id: string;
-  name: string;
 }
 
 export interface ApiFullImageModel {
   image: ApiImageModel;
   history: ApiImageHistoryModel[];
-  containers: ApiImageContainerModel[];
+  containers: ApiContainerListModel[];
 }

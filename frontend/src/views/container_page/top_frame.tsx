@@ -31,12 +31,14 @@ export default function TopFrame({ container, containers_service }: TopFrameProp
 
   // view ---------------------------------------------------------------------
   return (
-    <div className='box'>
-      <h2>Top</h2>
+    <div className='card my-2'>
+      <div className='card-body'>
+        <h2>Top</h2>
 
-      {containerTop && <ProcessesTable containerTop={containerTop} />}
-      {containerTop && <ButtonRefresh on_refresh={refresh_top} loading={loading} />}
-      {!containerTop && <p>no data</p>}
+        {containerTop && <ProcessesTable containerTop={containerTop} />}
+        {containerTop && <ButtonRefresh on_refresh={refresh_top} loading={loading} />}
+        {!containerTop && <p>no data</p>}
+      </div>
     </div>
   );
 }
@@ -52,7 +54,11 @@ function ProcessesTable({ containerTop }: ProcessesViewProps) {
 
   const body_row = (row: string[]) => {
     return row.map((data, idx) => {
-      return <td key={idx}>{data}</td>;
+      return (
+        <td key={idx}>
+          <code>{data}</code>
+        </td>
+      );
     });
   };
 

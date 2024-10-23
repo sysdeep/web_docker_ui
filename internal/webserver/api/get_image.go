@@ -14,11 +14,6 @@ import (
 
 // models
 
-type imageContainerModel struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
 type imageModel struct {
 	// holds digests of image manifests that reference the image.
 	ID string `json:"id"`
@@ -115,7 +110,7 @@ type imageHistoryModel struct {
 
 	// created by
 	// Required: true
-	// CreatedBy string `json:"CreatedBy"`
+	CreatedBy string `json:"created_by"`
 
 	// Id
 	// Required: true
@@ -131,9 +126,9 @@ type imageHistoryModel struct {
 }
 
 type imagePageModel struct {
-	Image      imageModel            `json:"image"`
-	History    []imageHistoryModel   `json:"history"`
-	Containers []imageContainerModel `json:"containers"`
+	Image      imageModel           `json:"image"`
+	History    []imageHistoryModel  `json:"history"`
+	Containers []containerListModel `json:"containers"`
 }
 
 // handler
@@ -144,6 +139,8 @@ func (h *Api) GetImage(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
+
+	// utils.PrintAsJson(image_inspect)
 
 	history_data, err := h.docker_client.ImageHistory(context.Background(), id)
 	if err != nil {
@@ -167,8 +164,6 @@ func (h *Api) GetImage(c echo.Context) error {
 		Containers: make_image_containers(image_model, raw_containers),
 	}
 
-	// fmt.Printf("%+v\n", response)
-
 	return c.JSON(http.StatusOK, response)
 }
 
@@ -182,10 +177,11 @@ func make_image_history_model(data image.HistoryResponseItem) imageHistoryModel 
 		tags = data.Tags
 	}
 	return imageHistoryModel{
-		ID:      data.ID,
-		Created: created_string,
-		Size:    data.Size,
-		Tags:    tags,
+		ID:        data.ID,
+		Created:   created_string,
+		CreatedBy: data.CreatedBy,
+		Size:      data.Size,
+		Tags:      tags,
 	}
 }
 
@@ -201,16 +197,18 @@ func make_image_model(data types.ImageInspect) imageModel {
 		Created:  created_string,
 		Parent:   data.Parent,
 		Comment:  data.Comment,
+
+		// NOTE: empty string
+		// DockerVersion: data.DockerVersion,
 	}
 }
 
-func make_image_containers(image imageModel, containers_list []types.Container) []imageContainerModel {
-	result := []imageContainerModel{}
+func make_image_containers(image imageModel, containers_list []types.Container) []containerListModel {
+	result := []containerListModel{}
 
 	for _, c := range containers_list {
 		if c.ImageID == image.ID {
-			// NOTE: берём только 1 имя, зачем это списком сделано - непонятно...
-			result = append(result, imageContainerModel{c.ID, c.Names[0]})
+			result = append(result, newContainerListModel(c))
 		}
 	}
 	return result

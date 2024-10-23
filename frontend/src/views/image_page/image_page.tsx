@@ -5,11 +5,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import DetailsFrame from './detailes_frame';
 import ContainersFrame from './containers_frame';
 import HistoryFrame from './history_frame';
-import ImagesService, {
-  ApiFullImageModel,
-} from '../../services/images_service';
+import ImagesService, { ApiFullImageModel } from '../../services/images_service';
 import { route } from '@src/routes';
 import { useConfiguration } from '@src/store/configuration';
+import ButtonRefresh from '@src/components/button_refresh';
 
 export default function ImagePage() {
   const { id } = useParams();
@@ -21,17 +20,15 @@ export default function ImagePage() {
   }, []);
 
   const [image, setImage] = useState<ApiFullImageModel | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = () => {
+    setLoading(false);
     images_service
       .get_image(id)
-      .then((image) => {
-        console.log(image);
-        setImage(image);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then(setImage)
+      .catch(console.log)
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -55,7 +52,7 @@ export default function ImagePage() {
       return (
         <div>
           <DetailsFrame image={image} on_remove={on_remove} />
-          <ContainersFrame image={image} />
+          <ContainersFrame containers={image.containers} />
           <HistoryFrame image={image} />
         </div>
       );
@@ -73,6 +70,10 @@ export default function ImagePage() {
         <IconImages />
         &nbsp; Image: {page_title}
       </PageTitle>
+
+      <div>
+        <ButtonRefresh on_refresh={refresh} loading={loading} />
+      </div>
 
       {body()}
     </div>

@@ -49,7 +49,7 @@ func (h *Api) GetVolume(c echo.Context) error {
 
 	containers := []containerListModel{}
 	for _, c := range raw_containers {
-		containers = append(containers, convert_container(c))
+		containers = append(containers, newContainerListModel(c))
 	}
 
 	// response

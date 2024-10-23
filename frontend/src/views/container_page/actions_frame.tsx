@@ -20,8 +20,7 @@ export default function ActionsFrame({ status, on_action }: ActionsFrameProps) {
   // };
 
   return (
-    <div className='box'>
-      <h2>Actions</h2>
+    <div>
       <div>
         <button className={'btn btn-secondary mx-2 ' + start_classes} onClick={() => on_action(ContainerAction.start)}>
           <i className='bi bi-play-fill'></i> Start

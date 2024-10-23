@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import ActionsFrame from './actions_frame';
 import StatusFrame from './status_frame';
 import PageTitle from '../../components/page_title';
 import ContainersService, { ApiContainerResponseModel, ContainerTopModel } from '../../services/containers_service';
@@ -13,7 +12,8 @@ import { useConfiguration } from '@src/store/configuration';
 import ButtonRefresh from '@src/components/button_refresh';
 import TopFrame from './top_frame';
 import { route } from '@src/routes';
-import StatsFrame from './stats_frame';
+// import StatsFrame from './stats_frame';
+import { strip_container_name } from '@src/utils/containers';
 
 export default function ContainerPage() {
   const { id } = useParams();
@@ -67,11 +67,31 @@ export default function ContainerPage() {
 
     return (
       <>
-        <ActionsFrame status={container.state.status} on_action={on_action} />
-        <StatusFrame container={container} />
+        <StatusFrame container={container} on_action={on_action} />
+
+        <div>
+          <ul>
+            <li>
+              <a href='/container/{container.container.id}/logs'>Logs TODO</a>
+            </li>
+            <li>
+              <a href='/container/{container.container.id}/inspect'>Inspect TODO</a>
+            </li>
+            <li>
+              <a href='/container/{container.container.id}/stats'>Stats TODO</a>
+            </li>
+            <li>
+              <a href='/container/{container.container.id}/console'>Console TODO</a>
+            </li>
+            <li>
+              <a href='/container/{container.container.id}/attach'>Attach TODO</a>
+            </li>
+          </ul>
+        </div>
 
         <TopFrame container={container} containers_service={containers_service} />
-        <StatsFrame container={container} containers_service={containers_service} />
+        {/* TODO: not ready */}
+        {/* <StatsFrame container={container} containers_service={containers_service} /> */}
 
         <DetailsFrame container={container} />
         <NetworksFrame container={container} />
@@ -83,7 +103,7 @@ export default function ContainerPage() {
   return (
     <div>
       <PageTitle>
-        <IconContainers /> Container: {container ? container.container.name : 'loading'}
+        <IconContainers /> Container: {container ? strip_container_name(container.container.name) : 'loading'}
       </PageTitle>
       <div>
         <ButtonRefresh on_refresh={refresh} loading={loading} />

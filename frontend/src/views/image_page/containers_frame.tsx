@@ -1,32 +1,20 @@
+import ContainersTable from '@src/components/containers_table';
 import { ApiFullImageModel } from '../../services/images_service';
 import React from 'react';
+import { ApiContainerListModel } from '@src/models/api_container_list_model';
 
 interface ContainersFrameProps {
-  image: ApiFullImageModel;
+  containers: ApiContainerListModel[];
 }
-export default function ContainersFrame({ image }: ContainersFrameProps) {
-  const rows_view = image.containers.map((container, idx) => {
-    return (
-      <tr key={idx}>
-        <td>
-          {/* TODO */}
-          {/* <a href='/containers/ .ID '> .Name </a> */}
-          {container.name}
-        </td>
-      </tr>
-    );
-  });
+
+export default function ContainersFrame({ containers }: ContainersFrameProps) {
   return (
-    <div className='box'>
-      <h2>Containers</h2>
-      <table className='table table-small striped'>
-        <thead>
-          <tr>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>{rows_view}</tbody>
-      </table>
+    <div className='card my-2'>
+      <div className='card-body'>
+        <h2>Containers</h2>
+
+        <ContainersTable containers={containers} />
+      </div>
     </div>
   );
 }
