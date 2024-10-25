@@ -124,6 +124,9 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	e.GET("/api/secrets/:id", api_handlers.GetSecret)
 	e.DELETE("/api/secrets/:id", api_handlers.RemoveSecret)
 
+	// services
+	e.GET("/api/services", api_handlers.GetServices)
+
 	// info
 	e.GET("/api/info", api_handlers.GetInfo)
 
