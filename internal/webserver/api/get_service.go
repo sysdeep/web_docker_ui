@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 	"hdu/internal/utils"
-	"hdu/internal/webserver/api/domain/service_model"
+	"hdu/internal/webserver/api/docker_adapter"
 	"net/http"
 
 	"github.com/docker/docker/api/types"
@@ -24,7 +24,7 @@ func (h *Api) GetService(c echo.Context) error {
 	utils.PrintAsJson(service_model_d)
 	utils.PrintAsJson(raw)
 
-	response := service_model.NewServiceListModel(service_model_d)
+	response := docker_adapter.NewServiceModel(service_model_d)
 
 	return c.JSON(http.StatusOK, response)
 }

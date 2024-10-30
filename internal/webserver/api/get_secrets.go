@@ -2,37 +2,25 @@ package api
 
 import (
 	"context"
+	"hdu/internal/webserver/api/docker_adapter"
+	"hdu/internal/webserver/api/models"
 	"net/http"
 	"sort"
 
 	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/swarm"
 	"github.com/labstack/echo/v4"
 )
 
-// models
-type secretListModel struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Created string `json:"created"`
-	Updated string `json:"updated"`
-}
-
-type secretsPageModel struct {
-	Secrets []secretListModel `json:"secrets"`
-	Total   int               `json:"total"`
-}
-
-// handler
+// handler --------------------------------------------------------------------
 func (h *Api) GetSecrets(c echo.Context) error {
 	secrets_data, err := h.docker_client.SecretList(context.Background(), types.SecretListOptions{})
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	var secrets []secretListModel
+	secrets := []models.Secret{}
 	for _, v := range secrets_data {
-		secrets = append(secrets, make_secret_list_model(v))
+		secrets = append(secrets, docker_adapter.NewSecretModel(v))
 	}
 
 	sort.SliceStable(secrets, func(i, j int) bool {
@@ -47,12 +35,8 @@ func (h *Api) GetSecrets(c echo.Context) error {
 	return c.JSON(http.StatusOK, response)
 }
 
-func make_secret_list_model(model swarm.Secret) secretListModel {
-	// utils.PrintAsJson(model)
-	return secretListModel{
-		ID:      model.ID,
-		Name:    model.Spec.Name,
-		Created: model.CreatedAt.String(),
-		Updated: model.UpdatedAt.String(),
-	}
+// models ---------------------------------------------------------------------
+type secretsPageModel struct {
+	Secrets []models.Secret `json:"secrets"`
+	Total   int             `json:"total"`
 }
