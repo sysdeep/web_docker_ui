@@ -126,6 +126,7 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 
 	// services
 	e.GET("/api/services", api_handlers.GetServices)
+	e.GET("/api/service/:id", api_handlers.GetService)
 
 	// info
 	e.GET("/api/info", api_handlers.GetInfo)

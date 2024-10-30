@@ -19,6 +19,8 @@ import { join_url } from './utils/url';
 import RepositoriesPage from './views/registry/repositories_page/repositories_page';
 import RepositoryPage from './views/registry/repository_page/repository_page';
 import RepositoryTagPage from './views/registry/repository_tag_page/repository_tag_page';
+import ServicesPage from './views/services_page/services_page';
+import ServicePage from './views/service_page/service_page';
 
 export const route = {
   image: '/image',
@@ -33,6 +35,8 @@ export const route = {
   configs: '/configs',
   secret: '/secret',
   secrets: '/secrets',
+  service: '/service',
+  services: '/services',
 
   registry_repositories: '/registry/repositories',
   registry_repository: '/registry/repository',
@@ -108,6 +112,17 @@ export const routes = [
         element: <SecretPage />,
       },
 
+      // services
+      {
+        path: route.services,
+        element: <ServicesPage />,
+      },
+      {
+        path: join_url(route.service, ':id'),
+        element: <ServicePage />,
+      },
+
+      // registry
       {
         path: route.registry_repositories,
         element: <RepositoriesPage />,

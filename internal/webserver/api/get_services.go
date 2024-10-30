@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// handler
+// handler --------------------------------------------------------------------
 func (h *Api) GetServices(c echo.Context) error {
 	services_list, err := h.docker_client.ServiceList(context.Background(), types.ServiceListOptions{})
 	if err != nil {
@@ -25,17 +25,35 @@ func (h *Api) GetServices(c echo.Context) error {
 }
 
 // models ---------------------------------------------------------------------
-type serviceSpec struct {
-	Name   string            `json:"name"`
-	Labels map[string]string `json:"labels"`
+// type serviceSpec struct {
+// 	Name   string            `json:"name"`
+// 	Labels map[string]string `json:"labels"`
+// }
+
+type serviceMode struct {
+	Replicated *replicatedService `json:"replicated"`
+	Global     *globalService     `json:"global"`
+	// ReplicatedJob *ReplicatedJob     `json:",omitempty"`
+	// GlobalJob     *GlobalJob         `json:",omitempty"`
 }
+
+// ReplicatedService is a kind of ServiceMode.
+type replicatedService struct {
+	Replicas int `json:"replicas"`
+}
+
+// GlobalService is a kind of ServiceMode.
+type globalService struct{}
 
 // Service represents a service.
 type serviceListModel struct {
 	ID        string      `json:"id"`
+	Name      string      `json:"name"`
+	Mode      serviceMode `json:"mode"`
+	Image     string      `json:"image"`
 	CreatedAt string      `json:"created_at"`
 	UpdatedAt string      `json:"updated_at"`
-	Spec      serviceSpec `json:"spec"`
+	// Spec      serviceSpec `json:"spec"`
 	// PreviousSpec *ServiceSpec  `json:",omitempty"`
 	// Endpoint     Endpoint      `json:",omitempty"`
 	// UpdateStatus *UpdateStatus `json:",omitempty"`
@@ -58,15 +76,45 @@ func newServiceListModel(model swarm.Service) serviceListModel {
 	created_str := model.CreatedAt.Format(time.RFC3339) // converts utc time to RFC3339 format
 	updated_str := model.UpdatedAt.Format(time.RFC3339) // converts utc time to RFC3339 format
 
-	spec := serviceSpec{
-		Name:   model.Spec.Name,
-		Labels: model.Spec.Labels,
+	var global_mode *globalService
+	if model.Spec.Mode.Global != nil {
+		global_mode = &globalService{}
 	}
+
+	var replicated_mode *replicatedService
+	if model.Spec.Mode.Replicated != nil {
+		var replicas_count int
+		if model.Spec.Mode.Replicated.Replicas == nil {
+			replicas_count = 0
+		} else {
+			replicas_count = int(*model.Spec.Mode.Replicated.Replicas)
+		}
+		replicated_mode = &replicatedService{
+			Replicas: replicas_count,
+		}
+	}
+
+	var image string
+	if model.Spec.TaskTemplate.ContainerSpec != nil {
+		image = model.Spec.TaskTemplate.ContainerSpec.Image
+	}
+
+	// spec := serviceSpec{
+	// 	Name:   model.Spec.Name,
+	// 	Labels: model.Spec.Labels,
+	// }
 	return serviceListModel{
 		ID:        model.ID,
+		Name:      model.Spec.Name,
 		CreatedAt: created_str,
 		UpdatedAt: updated_str,
-		Spec:      spec,
+		Image:     image,
+		Mode: serviceMode{
+			Replicated: replicated_mode,
+			Global:     global_mode,
+		},
+
+		// Spec:      spec,
 	}
 }
 

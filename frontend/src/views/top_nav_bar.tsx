@@ -9,6 +9,7 @@ import IconSecrets from '../components/icon_secrets';
 import IconHome from '../components/icon_home';
 import { route } from '../routes';
 import IconRegistry from '@src/components/icon_registry';
+import IconServices from '@src/components/icon_services';
 
 export default function TopNavBar() {
   return (
@@ -63,6 +64,11 @@ export default function TopNavBar() {
             <li className='nav-item'>
               <Link to={route.secrets} className='nav-link'>
                 <IconSecrets /> Secrets
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <Link to={route.services} className='nav-link'>
+                <IconServices /> Services
               </Link>
             </li>
             <li className='nav-item'>

@@ -16,7 +16,7 @@ func main() {
 
 	if len(catalog.Repositories) > 0 {
 
-		repo, err := client.GetRepository(catalog.Repositories[0])
+		repo, err := client.GetRepository(catalog.Repositories[0].ID)
 		_check_error(err)
 
 		fmt.Println(repo)
