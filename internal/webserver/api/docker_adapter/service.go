@@ -49,6 +49,66 @@ func newServiceSpec(spec swarm.ServiceSpec) models.ServiceSpec {
 func newServiceTaskSpec(spec swarm.TaskSpec) models.ServiceTaskSpec {
 	return models.ServiceTaskSpec{
 		ContainerSpec: newServiceContainerSpec(spec.ContainerSpec),
+		Resources:     newResources(spec),
+	}
+}
+
+func newResources(spec swarm.TaskSpec) *models.ResourceRequirements {
+	if spec.Resources == nil {
+		return nil
+	}
+
+	// limits
+	var limits *models.Limit
+	if spec.Resources.Limits != nil {
+		limits = &models.Limit{
+			NanoCPUs:    spec.Resources.Limits.NanoCPUs,
+			MemoryBytes: spec.Resources.Limits.MemoryBytes,
+			Pids:        spec.Resources.Limits.Pids,
+		}
+	}
+
+	// resources
+	var reservations *models.Resources
+	if spec.Resources.Reservations != nil {
+		gresources := []models.GenericResource{}
+		for _, gr := range spec.Resources.Reservations.GenericResources {
+			gresources = append(gresources, newGenericResource(gr))
+		}
+
+		reservations = &models.Resources{
+			NanoCPUs:         spec.Resources.Reservations.NanoCPUs,
+			MemoryBytes:      spec.Resources.Reservations.MemoryBytes,
+			GenericResources: gresources,
+		}
+	}
+
+	return &models.ResourceRequirements{
+		Limits:       limits,
+		Reservations: reservations,
+	}
+}
+
+func newGenericResource(spec swarm.GenericResource) models.GenericResource {
+	var nr *models.NamedGenericResource
+	if spec.NamedResourceSpec != nil {
+		nr = &models.NamedGenericResource{
+			Kind:  spec.NamedResourceSpec.Kind,
+			Value: spec.NamedResourceSpec.Value,
+		}
+	}
+
+	var dr *models.DiscreteGenericResource
+	if spec.NamedResourceSpec != nil {
+		dr = &models.DiscreteGenericResource{
+			Kind:  spec.DiscreteResourceSpec.Kind,
+			Value: spec.DiscreteResourceSpec.Value,
+		}
+	}
+
+	return models.GenericResource{
+		NamedResourceSpec:    nr,
+		DiscreteResourceSpec: dr,
 	}
 }
 
@@ -59,6 +119,8 @@ func newServiceContainerSpec(spec *swarm.ContainerSpec) *models.ServiceContainer
 
 	return &models.ServiceContainerSpec{
 		Image: spec.Image,
+		Args:  spec.Args,
+		Env:   spec.Env,
 	}
 }
 

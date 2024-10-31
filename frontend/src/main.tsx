@@ -16,9 +16,12 @@ import { useConfiguration } from './store/configuration';
 
 // setup configuration
 const { setConfiguration } = useConfiguration();
+const application_configuration = (window as any).application_configuration || {};
+const base_url = application_configuration.base_url || 'http://localhost:1313';
+console.log(application_configuration);
+console.log(base_url);
 setConfiguration({
-  // TODO: use global variable
-  base_url: 'http://localhost:1313',
+  base_url: base_url,
 });
 
 // setup router
@@ -27,6 +30,4 @@ const router = createHashRouter(routes);
 
 // Render application in DOM
 // createRoot(document.getElementById('app')).render(app);
-createRoot(document.getElementById('app')).render(
-  <RouterProvider router={router} />,
-);
+createRoot(document.getElementById('app')).render(<RouterProvider router={router} />);

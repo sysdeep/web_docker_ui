@@ -77,7 +77,7 @@ type ServiceTaskSpec struct {
 	ContainerSpec *ServiceContainerSpec `json:"container_spec"`
 	// PluginSpec            *runtime.PluginSpec       `json:",omitempty"`
 	// NetworkAttachmentSpec *NetworkAttachmentSpec    `json:",omitempty"`
-	// Resources             *ResourceRequirements     `json:",omitempty"`
+	Resources *ResourceRequirements `json:"resources"`
 	// RestartPolicy         *RestartPolicy            `json:",omitempty"`
 	// Placement             *Placement                `json:",omitempty"`
 	// Networks              []NetworkAttachmentConfig `json:",omitempty"`
@@ -86,14 +86,60 @@ type ServiceTaskSpec struct {
 	// Runtime               RuntimeType `json:",omitempty"`
 }
 
+// ResourceRequirements represents resources requirements.
+type ResourceRequirements struct {
+	Limits       *Limit     `json:"limits"`
+	Reservations *Resources `json:"reservations"`
+}
+
+// Limit describes limits on resources which can be requested by a task.
+type Limit struct {
+	NanoCPUs    int64 `json:"nano_cpus"`
+	MemoryBytes int64 `json:"memory_bytes"`
+	Pids        int64 `json:"pids"`
+}
+
+// Resources represents resources (CPU/Memory) which can be advertised by a
+// node and requested to be reserved for a task.
+type Resources struct {
+	NanoCPUs         int64             `json:"nano_cpus"`
+	MemoryBytes      int64             `json:"memiry_bytes"`
+	GenericResources []GenericResource `json:"generic_resources"`
+}
+
+// GenericResource represents a "user defined" resource which can
+// be either an integer (e.g: SSD=3) or a string (e.g: SSD=sda1)
+type GenericResource struct {
+	NamedResourceSpec    *NamedGenericResource    `json:"named_resource_spec"`
+	DiscreteResourceSpec *DiscreteGenericResource `json:"discrete_resource_spec"`
+}
+
+// NamedGenericResource represents a "user defined" resource which is defined
+// as a string.
+// "Kind" is used to describe the Kind of a resource (e.g: "GPU", "FPGA", "SSD", ...)
+// Value is used to identify the resource (GPU="UUID-1", FPGA="/dev/sdb5", ...)
+type NamedGenericResource struct {
+	Kind  string `json:"kind"`
+	Value string `json:"value"`
+}
+
+// DiscreteGenericResource represents a "user defined" resource which is defined
+// as an integer
+// "Kind" is used to describe the Kind of a resource (e.g: "GPU", "FPGA", "SSD", ...)
+// Value is used to count the resource (SSD=5, HDD=3, ...)
+type DiscreteGenericResource struct {
+	Kind  string `json:"kind"`
+	Value int64  `json:"value"`
+}
+
 // ContainerSpec represents the spec of a container.
 type ServiceContainerSpec struct {
 	Image string `json:"image"`
 	// Labels   map[string]string `json:",omitempty"`
 	// Command  []string          `json:",omitempty"`
-	// Args     []string          `json:",omitempty"`
+	Args []string `json:"args"`
 	// Hostname string            `json:",omitempty"`
-	// Env      []string          `json:",omitempty"`
+	Env []string `json:"env"`
 	// Dir      string            `json:",omitempty"`
 	// User     string            `json:",omitempty"`
 	// Groups   []string          `json:",omitempty"`
