@@ -4,8 +4,9 @@ import TotalReport from './total_report';
 import { useConfiguration } from '@src/store/configuration';
 import ButtonRefresh from '@src/components/button_refresh';
 import IconServices from '@src/components/icon_services';
-import ServicesService, { ServiceListModel } from '@src/services/services_service';
+import ServicesService from '@src/services/services_service';
 import ServicesTable from './services_table';
+import { Service } from '@src/models/service';
 
 export default function ServicesPage() {
   const { configuration } = useConfiguration();
@@ -13,7 +14,7 @@ export default function ServicesPage() {
     return new ServicesService(configuration.base_url);
   }, []);
 
-  const [services, setServices] = useState<ServiceListModel[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = () => {

@@ -1,3 +1,4 @@
+import { Service } from '@src/models/service';
 import { join_url } from '@src/routes';
 
 export default class ServicesService {
@@ -8,15 +9,15 @@ export default class ServicesService {
     console.log('services_service created');
   }
 
-  async get_services(): Promise<ServiceListModel[]> {
+  async get_services(): Promise<Service[]> {
     const response = await fetch(join_url(this.base_url, '/api/services'));
     const data = (await response.json()) as ServicesListModel;
     return data.services || [];
   }
 
-  async get_service(id: string): Promise<ServiceListModel> {
+  async get_service(id: string): Promise<Service> {
     const response = await fetch(join_url(this.base_url, '/api/service/' + id));
-    const data = (await response.json()) as ServiceListModel;
+    const data = (await response.json()) as Service;
     return data;
   }
 
@@ -29,26 +30,9 @@ export default class ServicesService {
 }
 
 // list models ----------------------------------------------------------------
-type ReplicatedService = {
-  replicas: number;
-};
-
-export type ServiceMode = {
-  replicated: null | ReplicatedService;
-  global: null | any; // NOTE: приходит только признак - есть или нет
-};
-
-export interface ServiceListModel {
-  id: string;
-  name: string;
-  image: string;
-  mode: ServiceMode;
-  created_at: string;
-  updated_at: string;
-}
 
 interface ServicesListModel {
-  services: ServiceListModel[];
+  services: Service[];
   total: number;
 }
 

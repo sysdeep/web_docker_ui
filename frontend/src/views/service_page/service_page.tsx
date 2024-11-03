@@ -10,7 +10,10 @@ import ContainersFrame from './containers_frame';
 import ButtonRemove from '@src/components/button_remove';
 import ButtonRefresh from '@src/components/button_refresh';
 import IconServices from '@src/components/icon_services';
-import ServicesService, { ServiceListModel } from '@src/services/services_service';
+import ServicesService from '@src/services/services_service';
+import FrameEnv from './container_spec/frame_env';
+import { Service } from '@src/models/service';
+import ContainerSpec from './container_spec/container_spec';
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -21,11 +24,15 @@ export default function ServicePage() {
     return new ServicesService(configuration.base_url);
   }, []);
 
-  const [service, setService] = useState<ServiceListModel | null>(null);
+  const [service, setService] = useState<Service | null>(null);
 
   const refresh = () => {
     services_service.get_service(id).then(setService).catch(console.log);
   };
+
+  // useEffect(() => {
+  //   console.log(service);
+  // }, [service]);
 
   useEffect(() => {
     console.log('page service mounted');
@@ -58,6 +65,7 @@ export default function ServicePage() {
           {/* TODO */}
           {/* <DetailsFrame volume={service} /> */}
           {/* <ContainersFrame containers={service.containers} /> */}
+          <ContainerSpec container={service.spec.task_template.container_spec} />
         </div>
       );
     }
@@ -76,3 +84,7 @@ export default function ServicePage() {
     </div>
   );
 }
+
+// function ServiceBody(){
+
+// }

@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { route, join_url } from '../../routes';
-import { ServiceListModel, ServiceMode } from '@src/services/services_service';
 import { format_date } from '@src/utils/humanize';
+import { Service, ServiceMode } from '@src/models/service';
 
 type Props = {
-  services: ServiceListModel[];
+  services: Service[];
   on_remove(id: string): void;
 };
 
