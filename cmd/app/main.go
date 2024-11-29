@@ -18,27 +18,9 @@ import (
 	"github.com/docker/docker/client"
 )
 
-// https://echo.labstack.com/docs/cookbook/embed-resources
-// //go:embed public
-// var embededFiles embed.FS
-
-// func getFileSystem(useOS bool) http.FileSystem {
-// 	if useOS {
-// 		log.Print("using live mode")
-// 		return http.FS(os.DirFS("public"))
-// 	}
-
-// 	log.Print("using embed mode")
-// 	fsys, err := fs.Sub(embededFiles, "public")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return http.FS(fsys)
-// }
-
 var (
-	version_flag bool
+	version_flag  bool
+	registry_flag string
 )
 
 func main() {
@@ -50,13 +32,19 @@ func main() {
 		os.Exit(0)
 	}
 
+	// check registry arg
+	if registry_flag == "none" {
+		fmt.Println("no registry flag")
+		os.Exit(1)
+	}
+
+	// logger
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 
 	log := logger.NewLogger()
 	slog.Info("start")
 
 	// test docker
-
 	d_client, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
 		panic(err)
@@ -75,7 +63,8 @@ func main() {
 	// 	fmt.Printf("%s %s (status: %s)\n", container.ID, container.Image, container.Status)
 	// }
 
-	r_client := registry_client.NewRegistryClient("https://localhost:5000")
+	// r_client := registry_client.NewRegistryClient("https://localhost:5000")
+	r_client := registry_client.NewRegistryClient(registry_flag)
 
 	// core
 	servs := services.NewServices(d_client)
@@ -114,6 +103,8 @@ func main() {
 func parse_flags() {
 	flag.BoolVar(&version_flag, "version", false, "show a version")
 	flag.BoolVar(&version_flag, "v", false, "show a version")
+
+	flag.StringVar(&registry_flag, "registry", "none", "registry address, e.g. http://localhost:5000")
 
 	flag.Parse()
 }
