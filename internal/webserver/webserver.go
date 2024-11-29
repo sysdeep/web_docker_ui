@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"context"
 	"hdu/internal/logger"
 	"hdu/internal/registry_client"
 	"hdu/internal/services"
@@ -157,6 +158,10 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	}
 }
 
-func (w *Webserver) Start() {
-	w.e.Logger.Fatal(w.e.Start("localhost:1313"))
+func (w *Webserver) Start() error {
+	return w.e.Start("localhost:1313")
+}
+
+func (w *Webserver) Shutdown(ctx context.Context) error {
+	return w.e.Shutdown(ctx)
 }

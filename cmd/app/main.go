@@ -1,12 +1,19 @@
 package main
 
 import (
+	"context"
+	"flag"
+	"fmt"
 	root "hdu"
 	"hdu/internal/logger"
 	"hdu/internal/registry_client"
 	"hdu/internal/services"
 	"hdu/internal/webserver"
 	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+	"time"
 
 	"github.com/docker/docker/client"
 )
@@ -30,7 +37,18 @@ import (
 // 	return http.FS(fsys)
 // }
 
+var (
+	version_flag bool
+)
+
 func main() {
+
+	parse_flags()
+
+	if version_flag {
+		fmt.Println(root.AppVersion)
+		os.Exit(0)
+	}
 
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 
@@ -64,5 +82,38 @@ func main() {
 
 	// web server
 	web_server := webserver.NewWebserver(d_client, r_client, servs, log, root.WWW)
-	web_server.Start()
+	go func() {
+
+		err := web_server.Start()
+		if err != nil && err != http.ErrServerClosed {
+			slog.Error(err.Error())
+		}
+
+	}()
+
+	// gracefull shutdown
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+
+	slog.Info("waiting for stop signal...")
+
+	<-ctx.Done()
+	_, cancel := context.WithTimeout(context.Background(), time.Second*2)
+	defer cancel()
+
+	slog.Info("got stop signal")
+
+	// stop webserver
+	if err := web_server.Shutdown(ctx); err != nil {
+		log.Fatal(err.Error())
+	}
+
+	slog.Info("finished")
+}
+
+func parse_flags() {
+	flag.BoolVar(&version_flag, "version", false, "show a version")
+	flag.BoolVar(&version_flag, "v", false, "show a version")
+
+	flag.Parse()
 }
