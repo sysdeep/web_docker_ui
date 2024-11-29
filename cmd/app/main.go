@@ -1,6 +1,7 @@
 package main
 
 import (
+	root "hdu"
 	"hdu/internal/logger"
 	"hdu/internal/registry_client"
 	"hdu/internal/services"
@@ -62,6 +63,6 @@ func main() {
 	servs := services.NewServices(d_client)
 
 	// web server
-	web_server := webserver.NewWebserver(d_client, r_client, servs, log)
+	web_server := webserver.NewWebserver(d_client, r_client, servs, log, root.WWW)
 	web_server.Start()
 }

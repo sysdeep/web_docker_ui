@@ -13,6 +13,7 @@ module.exports = [
     template: 'src/index.html',
     // favicon: 'assets/images/logo.png',
     inject: true,
+    minify: false,
   }),
   new MiniCssExtractPlugin({
     filename: '[name].[chunkhash].css',

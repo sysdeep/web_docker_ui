@@ -6,7 +6,9 @@ import (
 	"hdu/internal/services"
 	"hdu/internal/webserver/api"
 	"hdu/internal/webserver/handlers"
+	"hdu/internal/webserver/pages"
 	"hdu/internal/webserver/registry_handler"
+	"io/fs"
 
 	"github.com/docker/docker/client"
 	"github.com/labstack/echo/v4"
@@ -18,7 +20,8 @@ type Webserver struct {
 	// docker *client.Client
 }
 
-func NewWebserver(docker *client.Client, registry_client *registry_client.RegistryClient, services *services.Services, logger *logger.Logger) *Webserver {
+func NewWebserver(docker *client.Client, registry_client *registry_client.RegistryClient,
+	services *services.Services, logger *logger.Logger, www_fs fs.FS) *Webserver {
 
 	e := echo.New()
 
@@ -34,6 +37,10 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 
 	// CORS
 	e.Use(middleware.CORS())
+
+	// mounr embed fs
+	e.StaticFS("/embed", www_fs)
+	// e.StaticFS("/", www_fs)
 
 	// setup custom renderer
 	tplr := NewTemplater()
@@ -52,9 +59,15 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	// setup custom error renderer
 	// e.HTTPErrorHandler = customHTTPErrorHandler
 
+	// static pages
+	e.GET("/", func(c echo.Context) error {
+		return pages.MainPage(c)
+	})
+
+	// prev static pages
 	hndls := handlers.NewHandlers(docker, services, logger)
 
-	e.GET("/", hndls.MainPage)
+	e.GET("/main_stat", hndls.MainPage)
 	e.GET("/containers/:id", hndls.ContainerPage)
 	e.GET("/containers", hndls.ContainersPage)
 

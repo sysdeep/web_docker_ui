@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -7,11 +7,11 @@
   <body>
     <div id="app"></div>
     <script>
-      var BASE_URL_CONSTANT = 'http://localhost:1313'
-      window.application_configuration = {
-        base_url: BASE_URL_CONSTANT,
-      }
+      var __base_url__ = 'http://localhost:1313';
 
+      window.application_configuration = {
+        base_url: __base_url__,
+      };
     </script>
   </body>
 </html>
