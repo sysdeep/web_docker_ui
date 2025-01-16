@@ -32,12 +32,6 @@ func main() {
 		os.Exit(0)
 	}
 
-	// check registry arg
-	if registry_flag == "none" {
-		fmt.Println("no registry flag")
-		os.Exit(1)
-	}
-
 	// logger
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 
@@ -104,7 +98,7 @@ func parse_flags() {
 	flag.BoolVar(&version_flag, "version", false, "show a version")
 	flag.BoolVar(&version_flag, "v", false, "show a version")
 
-	flag.StringVar(&registry_flag, "registry", "none", "registry address, e.g. http://localhost:5000")
+	flag.StringVar(&registry_flag, "registry", "", "registry address, e.g. http://localhost:5000")
 
 	flag.Parse()
 }

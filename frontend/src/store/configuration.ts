@@ -3,12 +3,16 @@
  */
 // import { create } from 'zustand';
 
-interface Configuration {
+type Configuration = {
   base_url: string;
-}
+  version: string;
+  use_registry: boolean;
+};
 
 const default_configuration: Configuration = {
   base_url: '/',
+  version: '0.0.0',
+  use_registry: false,
 };
 
 var store: Configuration = {

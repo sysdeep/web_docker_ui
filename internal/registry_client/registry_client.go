@@ -7,6 +7,7 @@ https://metanit.com/go/tutorial/9.6.php
 import (
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -25,13 +26,23 @@ const (
 	contentDigestHeader = "docker-content-digest"
 )
 
+var errDisabled = errors.New("registry client is disabled")
+
 type RegistryClient struct {
 	address string
+	enabled bool
 	client  *http.Client
 }
 
 // create client
+// if address = "" - disabled
 func NewRegistryClient(address string) *RegistryClient {
+
+	enabled := len(address) > 0
+
+	if !enabled {
+		slog.Info("Registry client is disabled")
+	}
 
 	// for https ignoring
 	tr := &http.Transport{
@@ -39,11 +50,23 @@ func NewRegistryClient(address string) *RegistryClient {
 	}
 	client := http.Client{Transport: tr, Timeout: 5 * time.Second}
 
-	return &RegistryClient{address, &client}
+	return &RegistryClient{
+		address: address,
+		enabled: enabled,
+		client:  &client,
+	}
+}
+
+func (c *RegistryClient) IsEnabled() bool {
+	return c.enabled
 }
 
 // TODO: check!!!
 func (c *RegistryClient) APIVersionCheck() error {
+	if !c.enabled {
+		return errDisabled
+	}
+
 	url, _ := url.JoinPath(c.address, "v2")
 
 	// TODO: вынести в отдельный метод - слишком много повторений
@@ -64,6 +87,9 @@ func (c *RegistryClient) APIVersionCheck() error {
 
 // GetCatalog
 func (c *RegistryClient) GetCatalog(n int) (Catalog, error) {
+	if !c.enabled {
+		return Catalog{}, errDisabled
+	}
 
 	slog.Info("GetCatalog",
 		"n", n)
@@ -98,6 +124,10 @@ func (c *RegistryClient) GetCatalog(n int) (Catalog, error) {
 
 // GetRepository
 func (c *RegistryClient) GetRepository(id string) (RepositoryModel, error) {
+	if !c.enabled {
+		return RepositoryModel{}, errDisabled
+	}
+
 	// convert id to name
 	image_name, err := id2name(id)
 	if err != nil {
@@ -129,6 +159,10 @@ func (c *RegistryClient) GetRepository(id string) (RepositoryModel, error) {
 
 // GetManivestV2
 func (c *RegistryClient) GetManivestV2(id string, tag_name string) (ManifestV2, error) {
+	if !c.enabled {
+		return ManifestV2{}, errDisabled
+	}
+
 	// convert id to name
 	image_name, err := id2name(id)
 	if err != nil {
@@ -184,6 +218,10 @@ func (c *RegistryClient) GetManivestV2(id string, tag_name string) (ManifestV2, 
 // после удаления необходимо выполнить чистку
 // docker exec -it registry bin/registry garbage-collect  /etc/docker/registry/config.yml
 func (c *RegistryClient) RemoveManifest(id string, digest string) error {
+	if !c.enabled {
+		return errDisabled
+	}
+
 	// convert id to name
 	image_name, err := id2name(id)
 	if err != nil {

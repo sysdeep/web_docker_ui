@@ -1,6 +1,6 @@
 module hdu
 
-go 1.21.1
+go 1.23.2
 
 require (
 	github.com/docker/docker v27.1.1+incompatible

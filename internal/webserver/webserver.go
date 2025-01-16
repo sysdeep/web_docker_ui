@@ -21,8 +21,13 @@ type Webserver struct {
 	// docker *client.Client
 }
 
-func NewWebserver(docker *client.Client, registry_client *registry_client.RegistryClient,
-	services *services.Services, logger *logger.Logger, www_fs fs.FS) *Webserver {
+func NewWebserver(
+	docker *client.Client,
+	registry_client *registry_client.RegistryClient,
+	services *services.Services,
+	logger *logger.Logger,
+	www_fs fs.FS,
+) *Webserver {
 
 	e := echo.New()
 
@@ -39,9 +44,9 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 	// CORS
 	e.Use(middleware.CORS())
 
-	// mounr embed fs
-	e.StaticFS("/embed", www_fs)
-	// e.StaticFS("/", www_fs)
+	// mount embed fs
+	// e.StaticFS("/embed", www_fs)
+	e.StaticFS("/", www_fs)
 
 	// setup custom renderer
 	tplr := NewTemplater()
@@ -62,7 +67,13 @@ func NewWebserver(docker *client.Client, registry_client *registry_client.Regist
 
 	// static pages
 	e.GET("/", func(c echo.Context) error {
-		return pages.MainPage(c)
+
+		config := pages.MainPageConfiguration{
+			BaseURL:  "/",
+			Registry: registry_client.IsEnabled(),
+		}
+
+		return pages.MainPage(c, config, www_fs)
 	})
 
 	// prev static pages

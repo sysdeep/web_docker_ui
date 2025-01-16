@@ -1,32 +1,55 @@
 package pages
 
 import (
+	"fmt"
+	"hdu/internal/webserver/utils"
+	"io"
+	"io/fs"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/labstack/echo/v4"
 )
 
-func MainPage(c echo.Context) error {
+type MainPageConfiguration struct {
+	BaseURL  string
+	Registry bool
+}
 
-	if _, err := os.Stat("frontend/dist/index.html"); os.IsNotExist(err) {
-		return c.String(http.StatusInternalServerError, "index file not found")
+const main_page_inject_lines_template = `
+	__base_url__ = '%s';
+	__version__ = '%s';
+	__registry__ = %s;
+`
+
+func MainPage(c echo.Context, config MainPageConfiguration, storage fs.FS) error {
+
+	// inject variables to index.html, content of storage - see frontend/dist/
+	f, err := storage.Open("index.html")
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
+	defer f.Close()
 
-	index_bytes, err := os.ReadFile("frontend/dist/index.html")
+	content, err := io.ReadAll(f)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	correct_base_url := "var __base_url__ = 'http://localhost:1314';"
+	base_url := utils.ResolveURL("/", config.BaseURL)
 
-	index_lines := strings.Split(string(index_bytes), "\n")
+	registry := "false"
+	if config.Registry {
+		registry = "true"
+	}
+
+	index_lines := strings.Split(string(content), "\n")
 
 	lines := []string{}
 	for _, line := range index_lines {
-		if strings.Contains(line, "var __base_url__") {
-			lines = append(lines, correct_base_url)
+		if strings.Contains(line, "// INJECT") {
+			injected_lines := fmt.Sprintf(main_page_inject_lines_template, base_url, "0.0.0", registry)
+			lines = append(lines, injected_lines)
 			continue
 		}
 
