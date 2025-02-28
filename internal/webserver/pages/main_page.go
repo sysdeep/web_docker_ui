@@ -14,6 +14,7 @@ import (
 type MainPageConfiguration struct {
 	BaseURL  string
 	Registry bool
+	Version  string
 }
 
 const main_page_inject_lines_template = `
@@ -48,7 +49,7 @@ func MainPage(c echo.Context, config MainPageConfiguration, storage fs.FS) error
 	lines := []string{}
 	for _, line := range index_lines {
 		if strings.Contains(line, "// INJECT") {
-			injected_lines := fmt.Sprintf(main_page_inject_lines_template, base_url, "0.0.0", registry)
+			injected_lines := fmt.Sprintf(main_page_inject_lines_template, base_url, config.Version, registry)
 			lines = append(lines, injected_lines)
 			continue
 		}

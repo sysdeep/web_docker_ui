@@ -4,14 +4,6 @@
 
 - https://github.com/sysdeep/web_docker_ui
 
-## WebUI
-
-вариант с сервером
-
-## TkUI
-
-вариант desktop-UI
-
 ## Линки
 
 - https://habr.com/ru/articles/449038/
@@ -22,7 +14,7 @@
 - https://vonheikemen.github.io/devlog/tools/how-to-survive-without-multiple-cursors-in-vim/
 - registry v2 api - https://distribution.github.io/distribution/
 
-### favicon
+## favicon
 
 - https://habr.com/ru/companies/htmlacademy/articles/578224/
 - https://favicon.io/

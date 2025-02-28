@@ -27,6 +27,7 @@ func NewWebserver(
 	services *services.Services,
 	logger *logger.Logger,
 	www_fs fs.FS,
+	version string,
 ) *Webserver {
 
 	e := echo.New()
@@ -71,6 +72,7 @@ func NewWebserver(
 		config := pages.MainPageConfiguration{
 			BaseURL:  "/",
 			Registry: registry_client.IsEnabled(),
+			Version:  version,
 		}
 
 		return pages.MainPage(c, config, www_fs)

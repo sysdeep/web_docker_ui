@@ -64,7 +64,7 @@ func main() {
 	servs := services.NewServices(d_client)
 
 	// web server
-	web_server := webserver.NewWebserver(d_client, r_client, servs, log, root.WWW)
+	web_server := webserver.NewWebserver(d_client, r_client, servs, log, root.WWW, root.AppVersion)
 	go func() {
 
 		err := web_server.Start()

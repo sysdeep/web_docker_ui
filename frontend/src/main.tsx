@@ -17,7 +17,7 @@ import { useConfiguration } from './store/configuration';
 // setup configuration
 const { setConfiguration } = useConfiguration();
 const application_configuration = (window as any).application_configuration || {};
-console.log(application_configuration);
+
 setConfiguration({
   base_url: application_configuration.base_url,
   version: application_configuration.version,
