@@ -46,9 +46,10 @@ export default class InfoService {
 
   async get_info(): Promise<ApiInfoModel> {
     const response = await fetch(join_url(this.base_url, '/api/info'));
-
+    if (!response.ok) {
+      throw new Error((await response.json()).message);
+    }
     const data = (await response.json()) as ApiInfoModel;
-
     return data;
   }
 

@@ -1,6 +1,6 @@
 
 run:
-	go run ./cmd/app
+	DOCKER_API_VERSION=1.47 go run ./cmd/app
 	# go run ./cmd/app --registry https://localhost:5000 
 
 run_prod:

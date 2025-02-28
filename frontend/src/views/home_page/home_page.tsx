@@ -12,6 +12,7 @@ export default function HomePage() {
   }, []);
 
   const [info, setInfo] = useState<ApiInfoModel | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const refresh = () => {
     info_service
@@ -20,16 +21,19 @@ export default function HomePage() {
         setInfo(info);
       })
       .catch((err) => {
-        console.log(err);
+        setError(String(err));
       });
   };
 
   useEffect(() => {
-    console.log('page home mounted');
     refresh();
   }, []);
 
   const draw_body = () => {
+    if (error) {
+      return <div>{error}</div>;
+    }
+
     if (info) {
       return (
         <div className='row'>

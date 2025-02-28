@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"sort"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/network"
 	"github.com/labstack/echo/v4"
 )
 
@@ -36,7 +36,7 @@ type networksPageModel struct {
 
 // handler
 func (h *Api) GetNetworks(c echo.Context) error {
-	networks_data, err := h.docker_client.NetworkList(context.Background(), types.NetworkListOptions{})
+	networks_data, err := h.docker_client.NetworkList(context.Background(), network.ListOptions{})
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
@@ -58,7 +58,7 @@ func (h *Api) GetNetworks(c echo.Context) error {
 	return c.JSON(http.StatusOK, response)
 }
 
-func make_nerwork_list_model(model types.NetworkResource) networkListModel {
+func make_nerwork_list_model(model network.Summary) networkListModel {
 	// utils.PrintAsJson(model)
 	return networkListModel{
 		ID:      model.ID,
