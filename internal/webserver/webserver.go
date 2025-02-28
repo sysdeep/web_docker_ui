@@ -6,7 +6,6 @@ import (
 	"hdu/internal/registry_client"
 	"hdu/internal/services"
 	"hdu/internal/webserver/api"
-	"hdu/internal/webserver/handlers"
 	"hdu/internal/webserver/pages"
 	"hdu/internal/webserver/registry_handler"
 	"io/fs"
@@ -49,23 +48,6 @@ func NewWebserver(
 	// e.StaticFS("/embed", www_fs)
 	e.StaticFS("/", www_fs)
 
-	// setup custom renderer
-	tplr := NewTemplater()
-
-	// prev templates
-	// template_files := makeTemplatesList("views")
-	// t := &Template{
-	// 	// templates: template.Must(template.ParseGlob("views/*.html")),
-	// 	templates: template.Must(template.ParseFiles(template_files...)),
-	// }
-
-	// e.Renderer = t
-	e.Renderer = tplr
-
-	// NOTE: not used for api
-	// setup custom error renderer
-	// e.HTTPErrorHandler = customHTTPErrorHandler
-
 	// static pages
 	e.GET("/", func(c echo.Context) error {
 
@@ -78,43 +60,57 @@ func NewWebserver(
 		return pages.MainPage(c, config, www_fs)
 	})
 
+	// disable using templates because not embedded ---------------------------
+	// setup custom renderer
+
+	// prev templates
+	// template_files := makeTemplatesList("views")
+	// t := &Template{
+	// 	// templates: template.Must(template.ParseGlob("views/*.html")),
+	// 	templates: template.Must(template.ParseFiles(template_files...)),
+	// }
+
+	// e.Renderer = t
+
+	// tplr := NewTemplater()
+	// e.Renderer = tplr
+
+	// NOTE: not used for api
+	// setup custom error renderer
+	// e.HTTPErrorHandler = customHTTPErrorHandler
+
 	// prev static pages
-	hndls := handlers.NewHandlers(docker, services, logger)
+	// hndls := handlers.NewHandlers(docker, services, logger)
 
-	e.GET("/main_stat", hndls.MainPage)
-	e.GET("/containers/:id", hndls.ContainerPage)
-	e.GET("/containers", hndls.ContainersPage)
+	// e.GET("/main_stat", hndls.MainPage)
+	// e.GET("/containers/:id", hndls.ContainerPage)
+	// e.GET("/containers", hndls.ContainersPage)
 
-	// volumes
-	e.GET("/volumes/:name", hndls.VolumePage)
-	e.GET("/volumes/actions/prune", hndls.ActionVolumesPrune)
-	e.GET("/volumes/actions/remove/:name", hndls.ActionVolumeRemove)
-	e.GET("/volumes", hndls.VolumesPage)
+	// // volumes
+	// e.GET("/volumes/:name", hndls.VolumePage)
+	// e.GET("/volumes/actions/prune", hndls.ActionVolumesPrune)
+	// e.GET("/volumes/actions/remove/:name", hndls.ActionVolumeRemove)
+	// e.GET("/volumes", hndls.VolumesPage)
 
-	// images
-	e.GET("/images/:id", hndls.ImagePage)
-	e.GET("/images/actions/remove/:id", hndls.ActionImageRemove)
-	e.GET("/images", hndls.ImagesPage)
+	// // images
+	// e.GET("/images/:id", hndls.ImagePage)
+	// e.GET("/images/actions/remove/:id", hndls.ActionImageRemove)
+	// e.GET("/images", hndls.ImagesPage)
 
-	// networks
-	e.GET("/networks/:id", hndls.NetworkPage)
-	e.GET("/networks", hndls.NetworksPage)
-	e.GET("/networks/actions/remove/:id", hndls.ActionNetworkRemove)
+	// // networks
+	// e.GET("/networks/:id", hndls.NetworkPage)
+	// e.GET("/networks", hndls.NetworksPage)
+	// e.GET("/networks/actions/remove/:id", hndls.ActionNetworkRemove)
 
-	// configs
-	e.GET("/configs/:id", hndls.ConfigPage)
-	e.GET("/configs/actions/remove/:id", hndls.ActionConfigRemove)
-	e.GET("/configs", hndls.ConfigsPage)
+	// // configs
+	// e.GET("/configs/:id", hndls.ConfigPage)
+	// e.GET("/configs/actions/remove/:id", hndls.ActionConfigRemove)
+	// e.GET("/configs", hndls.ConfigsPage)
 
-	// secrets
-	e.GET("/secrets/:id", hndls.SecretPage)
-	e.GET("/secrets/actions/remove/:name", hndls.ActionSecretRemove)
-	e.GET("/secrets", hndls.SecretsPage)
-	// e.GET("/qqq", func(c echo.Context) error {
-
-	// 	// return c.Render(200, "aaa", 0)
-	// 	return c.Render(200, "aaa.html", 0)
-	// })
+	// // secrets
+	// e.GET("/secrets/:id", hndls.SecretPage)
+	// e.GET("/secrets/actions/remove/:name", hndls.ActionSecretRemove)
+	// e.GET("/secrets", hndls.SecretsPage)
 
 	// api ----------------------------------------------------------------------
 	api_handlers := api.NewApi(docker, registry_client, services, logger)

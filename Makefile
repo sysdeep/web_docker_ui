@@ -11,4 +11,4 @@ build_with_cgo:
 	go build --tags prod -o app ./cmd/app
 
 build:
-	CGO_ENABLED=0 go build --tags prod -o app ./cmd/app
+	CGO_ENABLED=0 go build --tags prod -o wdu ./cmd/app
