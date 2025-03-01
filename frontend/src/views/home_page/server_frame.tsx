@@ -9,13 +9,17 @@ interface ServerFrameProps {
   info: ApiInfoModel;
 }
 export default function ServerFrame({ info }: ServerFrameProps) {
-  const networks_view = info.system.default_addresses_pools.map((pool, idx) => {
-    return (
-      <span key={idx}>
-        [{pool.base} size: {pool.size}]
-      </span>
-    );
-  });
+  let networks_view = null;
+  if (info.system.default_addresses_pools) {
+    networks_view = info.system.default_addresses_pools.map((pool, idx) => {
+      return (
+        <span key={idx}>
+          [{pool.base} size: {pool.size}]
+        </span>
+      );
+    });
+  }
+  console.log(info.system.default_addresses_pools);
   return (
     <div className='card mb-2'>
       <div className='card-body'>
@@ -70,9 +74,10 @@ export default function ServerFrame({ info }: ServerFrameProps) {
                 {info.system.operating_system}({info.system.kernel_version})
               </td>
             </tr>
+
             <tr>
               <td>Address pool</td>
-              <td className='text-end'>{networks_view}</td>
+              <td className='text-end'>{networks_view || <>---</>}</td>
             </tr>
             <tr>
               <td>Default runtime</td>

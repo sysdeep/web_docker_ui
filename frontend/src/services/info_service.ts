@@ -24,7 +24,7 @@ interface ApiSystemModel {
   os_version: string;
   os_type: string;
   swarm: ApiSwarmInfo;
-  default_addresses_pools: ApiNetworkPool[];
+  default_addresses_pools: ApiNetworkPool[] | null;
   server_version: string;
   default_runtime: string;
   ncpu: number;
