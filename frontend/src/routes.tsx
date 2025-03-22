@@ -21,6 +21,7 @@ import RepositoryPage from './views/registry/repository_page/repository_page';
 import RepositoryTagPage from './views/registry/repository_tag_page/repository_tag_page';
 import ServicesPage from './views/services_page/services_page';
 import ServicePage from './views/service_page/service_page';
+import RepositoriesSmartPage from './views/registry/repositories_smart_page/repositories_smart_page';
 
 export const route = {
   image: '/image',
@@ -39,6 +40,7 @@ export const route = {
   services: '/services',
 
   registry_repositories: '/registry/repositories',
+  registry_repositories_smart: '/registry/repositories_smart',
   registry_repository: '/registry/repository',
   registry_repository_tag: '/registry/repository_tag',
 };
@@ -126,6 +128,10 @@ export const routes = [
       {
         path: route.registry_repositories,
         element: <RepositoriesPage />,
+      },
+      {
+        path: route.registry_repositories_smart,
+        element: <RepositoriesSmartPage />,
       },
       {
         path: join_url(route.registry_repository, ':id'),

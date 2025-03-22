@@ -105,6 +105,7 @@ func NewWebserver(
 	// registry
 	reg_handler := registry_handler.NewRegistryHandler(docker, registry_client)
 	e.GET("/api/registry/repositories", reg_handler.GetRegistryRepositories)
+	e.GET("/api/registry/repositories_smart", reg_handler.GetRegistryRepositoriesSmart)
 	e.GET("/api/registry/repository/:id", reg_handler.GetRegistryRepository)
 	e.GET("/api/registry/repository_tag/:id/:tag", reg_handler.GetRegistryRepositoryTag)
 	e.DELETE("/api/registry/repository_tag/:id/:tag", reg_handler.RemoveRegistryRepositoryTag)

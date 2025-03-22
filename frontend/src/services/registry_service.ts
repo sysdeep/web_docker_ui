@@ -7,9 +7,15 @@ export class RegistryService {
   }
 
   async get_repositories(): Promise<RepositoryListModel[]> {
-    const response = await fetch(
-      join_url(this.base_url, '/api/registry/repositories'),
-    );
+    const response = await fetch(join_url(this.base_url, '/api/registry/repositories'));
+
+    const data = (await response.json()) as RepositoriesResponse;
+
+    return data.repositories || [];
+  }
+
+  async get_repositories_smart(): Promise<RepositoryListModel[]> {
+    const response = await fetch(join_url(this.base_url, '/api/registry/repositories_smart'));
 
     const data = (await response.json()) as RepositoriesResponse;
 
@@ -17,25 +23,15 @@ export class RegistryService {
   }
 
   async get_repository(id: string): Promise<RepositoryModel> {
-    const response = await fetch(
-      join_url(this.base_url, '/api/registry/repository/' + id),
-    );
+    const response = await fetch(join_url(this.base_url, '/api/registry/repository/' + id));
 
     const data = (await response.json()) as RepositoryModel;
 
     return data;
   }
 
-  async get_repository_tag(
-    repository_id: string,
-    tag: string,
-  ): Promise<ReposytoryTagResponse> {
-    const response = await fetch(
-      join_url(
-        this.base_url,
-        `/api/registry/repository_tag/${repository_id}/${tag}`,
-      ),
-    );
+  async get_repository_tag(repository_id: string, tag: string): Promise<ReposytoryTagResponse> {
+    const response = await fetch(join_url(this.base_url, `/api/registry/repository_tag/${repository_id}/${tag}`));
 
     const data = (await response.json()) as ReposytoryTagResponse;
 
@@ -43,15 +39,9 @@ export class RegistryService {
   }
 
   async remove_tag(reposytory_id: string, tag: string): Promise<void> {
-    await fetch(
-      join_url(
-        this.base_url,
-        `/api/registry/repository_tag/${reposytory_id}/${tag}`,
-      ),
-      {
-        method: 'DELETE',
-      },
-    );
+    await fetch(join_url(this.base_url, `/api/registry/repository_tag/${reposytory_id}/${tag}`), {
+      method: 'DELETE',
+    });
   }
 
   async registry_action(action: number): Promise<void> {
