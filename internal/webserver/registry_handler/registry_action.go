@@ -2,7 +2,6 @@ package registry_handler
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -37,7 +36,7 @@ func (h *RegistryHandler) RegistryAction(c echo.Context) error {
 }
 
 func runGarbageCollector(docker_client *client.Client, registry_name string) error {
-	slog.Info("run garbage collextor action")
+	slog.Info("run garbage collector action")
 	// cmd := []string{"ls"}
 	// cmd := []string{"uptime"}
 	cmd := []string{registry_name, "garbage-collect", "/etc/docker/registry/config.yml"}
@@ -54,13 +53,12 @@ func runGarbageCollector(docker_client *client.Client, registry_name string) err
 	if err != nil {
 		return err
 	}
-	// fmt.Println(res)
 
-	// exec_start_options := container.ExecStartOptions{}
-	// err = h.docker_client.ContainerExecStart(context.Background(), res.ID, exec_start_options)
-	// if err != nil {
-	// 	return echo.NewHTTPError(http.StatusInternalServerError, err)
-	// }
+	exec_start_options := container.ExecStartOptions{}
+	err = docker_client.ContainerExecStart(context.Background(), res.ID, exec_start_options)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
 
 	// attach exec
 	// exec_attach_options := container.ExecAttachOptions{}
@@ -68,19 +66,19 @@ func runGarbageCollector(docker_client *client.Client, registry_name string) err
 	// if err != nil {
 	// 	return err
 	// }
-	//
+
 	// for {
 	// 	out_str, err := attach_result.Reader.ReadString('\n')
 	// 	if err == io.EOF {
 	// 		fmt.Println("end of reading, break")
 	// 		break
 	// 	}
-	//
+
 	// 	if err != nil {
 	// 		return err
 	// 	}
 	// 	fmt.Println(string(out_str))
-	//
+
 	// }
 
 	// inspect exec
@@ -92,8 +90,7 @@ func runGarbageCollector(docker_client *client.Client, registry_name string) err
 	// utils.PrintAsJson(inspect_result)
 
 	if inspect_result.ExitCode != 0 {
-
-		return errors.New(fmt.Sprintf("error to exec garbage, exit code: %d", inspect_result.ExitCode))
+		return fmt.Errorf("error to exec garbage, exit code: %d", inspect_result.ExitCode)
 	}
 
 	return nil
