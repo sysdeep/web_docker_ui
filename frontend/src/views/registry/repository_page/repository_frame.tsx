@@ -1,4 +1,5 @@
 import ButtonRemove from '@src/components/button_remove';
+import IconRemove from '@src/components/icon_remove';
 import { join_url, route } from '@src/routes';
 import { RepositoryModel } from '@src/services/registry_service';
 import React from 'react';
@@ -10,11 +11,7 @@ type RepositoryFrameProps = {
   on_tag_remove(tag: string): void;
 };
 
-export default function RepositoryFrame({
-  repository,
-  on_repository_remove,
-  on_tag_remove,
-}: RepositoryFrameProps) {
+export default function RepositoryFrame({ repository, on_repository_remove, on_tag_remove }: RepositoryFrameProps) {
   const tags_view = repository.tags
     .sort((a, b) => {
       return a > b ? 1 : -1;
@@ -63,25 +60,24 @@ function TagsTable({ repository, on_remove }: TagsTableProps) {
       return (
         <tr key={idx}>
           <td>
-            <Link
-              to={join_url(
-                route.registry_repository_tag,
-                repository.id + '/' + tag,
-              )}
-            >
-              {tag}
-            </Link>
+            <Link to={join_url(route.registry_repository_tag, repository.id + '/' + tag)}>{tag}</Link>
           </td>
-          <td>
+          <td className='text-center'>
             <a href='#' onClick={(e) => on_remove_clicked(e, tag)}>
-              remove
+              <IconRemove /> remove
             </a>
           </td>
         </tr>
       );
     });
   return (
-    <table className='table table-sm'>
+    <table className='table table-sm table-striped'>
+      <thead>
+        <tr>
+          <th>Tag</th>
+          <th className='text-center'>Options</th>
+        </tr>
+      </thead>
       <tbody>{tags_view}</tbody>
     </table>
   );

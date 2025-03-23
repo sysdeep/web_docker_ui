@@ -1,28 +1,25 @@
 import PageTitle from '@src/components/page_title';
-import { join_url, route } from '@src/routes';
-import { RegistryAction, RegistryService, RepositoryListModel, RepositoryModel } from '@src/services/registry_service';
+import { RegistryAction, RegistryService, RepositoryListModel } from '@src/services/registry_service';
 import { useConfiguration } from '@src/store/configuration';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import ActionsBar from '../components/actions_bar';
 import IconRegistry from '@src/components/icon_registry';
 import TreeItem, { TreeItemData } from './tree_item';
 
-export default function RepositoriesSmartPage() {
+export default function RepositoriesPageTree() {
   const { configuration } = useConfiguration();
 
   const registry_service = useMemo(() => {
     return new RegistryService(configuration.base_url);
   }, []);
 
-  const [repositories, setRepositories] = useState<RepositoryModel[]>([]);
+  const [repositories, setRepositories] = useState<RepositoryListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [showEmpty, setShowEmpty] = useState<boolean>(false);
 
   const refresh = () => {
     setLoading(true);
     registry_service
-      .get_repositories_smart()
+      .get_repositories()
       .then((repos) => {
         setRepositories(repos);
       })
@@ -48,53 +45,12 @@ export default function RepositoriesSmartPage() {
   return (
     <div>
       <PageTitle>
-        <IconRegistry /> Repositories
+        <IconRegistry /> Catalog tree
       </PageTitle>
 
       <ActionsBar on_garbage={on_garbage} on_restart={on_restart} />
 
-      {/* page settings */}
-      <div>
-        <div className='form-check'>
-          <input
-            className='form-check-input'
-            type='checkbox'
-            onChange={() => setShowEmpty(!showEmpty)}
-            value={showEmpty ? '1' : '0'}
-            id='flexCheckDefault'
-          />
-          <label className='form-check-label' htmlFor='flexCheckDefault'>
-            отображать пустые
-          </label>
-        </div>
-      </div>
-
-      <hr />
-
-      <div>
-        <ul>
-          {repositories
-            .filter((row) => {
-              if (showEmpty) return true;
-              return row.tags.length > 0;
-            })
-            .map((row, idx) => (
-              <li key={idx}>
-                <div>
-                  <Link to={join_url(route.registry_repository, row.id)}>{row.name}</Link>
-                </div>
-                <ul>
-                  {row.tags.map((tag, idt) => (
-                    <li key={idt}>{tag}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-        </ul>
-      </div>
-
-      {/* NOTE: not used here */}
-      {/* <TreeItem root={to_tree(repositories)} /> */}
+      <TreeItem root={to_tree(repositories)} />
     </div>
   );
 }

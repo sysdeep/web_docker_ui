@@ -21,16 +21,29 @@ export default function ActionsBar({ on_garbage, on_restart }: ActionsBarProps) 
   return (
     <div className='clearfix'>
       <div className='float-end'>
+        <Link className='btn btn-primary me-2' to={route.registry_repositories}>
+          <i className='bi bi-link'></i>
+          &nbsp; Go to Catalog
+        </Link>
+
+        <Link className='btn btn-primary me-2' to={route.registry_repositories_smart}>
+          <i className='bi bi-link'></i>
+          &nbsp; Go to Repos
+        </Link>
+
+        <Link className='btn btn-primary me-2' to={route.registry_repositories_tree}>
+          <i className='bi bi-link'></i>
+          &nbsp; Go to Tree
+        </Link>
+
         <button className='btn btn-secondary me-2' onClick={on_garbage_click}>
-          Garbage
+          <i className='bi bi-trash3'></i>
+          &nbsp; Garbage
         </button>
         <button className='btn btn-secondary' onClick={on_restart_click}>
           <IconRefresh />
           Restart
         </button>
-        <Link className='btn btn-secondary' to={route.registry_repositories_smart}>
-          Long action
-        </Link>
       </div>
     </div>
   );

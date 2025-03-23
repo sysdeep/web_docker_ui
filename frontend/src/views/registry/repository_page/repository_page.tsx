@@ -1,8 +1,5 @@
 import PageTitle from '@src/components/page_title';
-import {
-  RegistryService,
-  RepositoryModel,
-} from '@src/services/registry_service';
+import { RegistryService, RepositoryModel } from '@src/services/registry_service';
 import { useConfiguration } from '@src/store/configuration';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
@@ -74,8 +71,9 @@ export default function RepositoryPage() {
   return (
     <div>
       <PageTitle>
-        <IconRegistry /> Repository: {page_name}
+        <IconRegistry /> Repository info
       </PageTitle>
+
       {repository && <RepositoryNavFrame repository={repository} />}
 
       {repository && (

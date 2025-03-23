@@ -26,9 +26,9 @@ func (h *RegistryHandler) GetRegistryRepositoriesSmart(c echo.Context) error {
 		}
 
 		// skip empty
-		if len(repo.Tags) == 0 {
-			continue
-		}
+		// if len(repo.Tags) == 0 {
+		// 	continue
+		// }
 
 		result = append(result, repo)
 
@@ -37,28 +37,18 @@ func (h *RegistryHandler) GetRegistryRepositoriesSmart(c echo.Context) error {
 	return c.JSON(http.StatusOK, newRegistryRepositoriesSmartResponse(result))
 }
 
-// type registryRepositoriesResponse struct {
-// 	Repositories []repositoryListModel `json:"repositories"`
-// }
+type registryRepositoriesSmartResponse struct {
+	Repositories []registryRepositoryResponse `json:"repositories"`
+}
 
-func newRegistryRepositoriesSmartResponse(model []registry_client.RepositoryModel) []registryRepositoryResponse {
+func newRegistryRepositoriesSmartResponse(model []registry_client.RepositoryModel) registryRepositoriesSmartResponse {
 
 	repos := []registryRepositoryResponse{}
 	for _, row := range model {
 		repos = append(repos, newRegistryRepositoryResponse(row))
 	}
 
-	return repos
+	return registryRepositoriesSmartResponse{
+		Repositories: repos,
+	}
 }
-
-// type repositoryListModel struct {
-// 	ID   string `json:"id"`
-// 	Name string `json:"name"`
-// }
-
-// func newRepositoryListModel(model registry_client.RepositoryListModel) repositoryListModel {
-// 	return repositoryListModel{
-// 		ID:   model.ID,
-// 		Name: model.Name,
-// 	}
-// }

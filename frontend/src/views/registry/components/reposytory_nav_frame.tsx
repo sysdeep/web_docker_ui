@@ -7,9 +7,7 @@ type RepositoryNavFrameProps = {
   repository: RepositoryModel;
 };
 
-export default function RepositoryNavFrame({
-  repository,
-}: RepositoryNavFrameProps) {
+export default function RepositoryNavFrame({ repository }: RepositoryNavFrameProps) {
   const tags_view = repository.tags
     .sort((a, b) => {
       return a > b ? 1 : -1;
@@ -17,14 +15,7 @@ export default function RepositoryNavFrame({
     .map((tag, idx) => {
       return (
         <span key={idx} className='mx-2'>
-          <Link
-            to={join_url(
-              route.registry_repository_tag,
-              repository.id + '/' + tag,
-            )}
-          >
-            {tag}
-          </Link>
+          <Link to={join_url(route.registry_repository_tag, repository.id + '/' + tag)}>{tag}</Link>
         </span>
       );
     });
@@ -41,10 +32,7 @@ export default function RepositoryNavFrame({
     <div>
       <ul>
         <li>
-          repository:{' '}
-          <Link to={join_url(route.registry_repository, repository.id)}>
-            {repository.name}
-          </Link>
+          repository: <Link to={join_url(route.registry_repository, repository.id)}>{repository.name}</Link>
         </li>
         <li>tags: {tags_view}</li>
       </ul>

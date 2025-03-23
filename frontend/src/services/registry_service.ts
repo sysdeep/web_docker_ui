@@ -14,10 +14,10 @@ export class RegistryService {
     return data.repositories || [];
   }
 
-  async get_repositories_smart(): Promise<RepositoryListModel[]> {
+  async get_repositories_smart(): Promise<RepositoryModel[]> {
     const response = await fetch(join_url(this.base_url, '/api/registry/repositories_smart'));
 
-    const data = (await response.json()) as RepositoriesResponse;
+    const data = (await response.json()) as RepositoriesSmartResponse;
 
     return data.repositories || [];
   }
@@ -54,6 +54,10 @@ export class RegistryService {
 // models ---------------------------------------------------------------------
 interface RepositoriesResponse {
   repositories: RepositoryListModel[];
+}
+
+interface RepositoriesSmartResponse {
+  repositories: RepositoryModel[];
 }
 
 export interface RepositoryListModel {

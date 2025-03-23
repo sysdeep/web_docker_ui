@@ -1,9 +1,5 @@
 import PageTitle from '@src/components/page_title';
-import {
-  RegistryService,
-  RepositoryModel,
-  TagManifest,
-} from '@src/services/registry_service';
+import { RegistryService, RepositoryModel, TagManifest } from '@src/services/registry_service';
 import { useConfiguration } from '@src/store/configuration';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -82,14 +78,12 @@ export default function RepositoryTagPage() {
   return (
     <div>
       <PageTitle>
-        <IconRegistry /> {page_name}
+        <IconRegistry /> Tag info
       </PageTitle>
 
       {repository && <RepositoryNavFrame repository={repository} />}
 
-      {manifest && repository && (
-        <DetailsFrame manifest={manifest} repository={repository} />
-      )}
+      {manifest && repository && <DetailsFrame manifest={manifest} repository={repository} />}
 
       {/* actions */}
       <div>
