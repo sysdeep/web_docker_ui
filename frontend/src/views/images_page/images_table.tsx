@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
-import ImageListModel from '../../models/image_list_model';
-import FilterModel from './filter_model';
-import { format_size } from '../../utils/humanize';
-import { Link } from 'react-router-dom';
-import { route, join_url } from '../../routes';
-import IconRemove from '@src/components/icon_remove';
+import ImageListModel from "../../models/image_list_model";
+import { format_size } from "../../utils/humanize";
+import { Link } from "react-router-dom";
+import { route, join_url } from "../../routes";
+import IconRemove from "@src/components/icon_remove";
 
 interface ImagesTableProps {
   on_remove(id: string): void;
   on_date(date: string): void;
   images: ImageListModel[];
-  filter: FilterModel;
 }
 
-export default function ImagesTable({
-  images,
-  filter,
-  on_remove,
-  on_date,
-}: ImagesTableProps) {
+export default function ImagesTable({ images, on_remove, on_date }: ImagesTableProps) {
   // const data = [1, 2, 3];
 
   // const [images, setImages] = useState<number[]>(data);
@@ -29,27 +21,19 @@ export default function ImagesTable({
   //   setImages(new_images);
   // };
 
-  const rows = images
-    .filter((v: ImageListModel) => {
-      if (filter.dates.length === 0) {
-        return true;
-      }
-      const [date, ..._] = v.created.split(' ');
-      return filter.dates.includes(date);
-    })
-    .map((v: ImageListModel, idx: number) => {
-      return (
-        <TableRow
-          uid={v.id}
-          tags={v.tags}
-          size={v.size}
-          created={v.created}
-          on_remove={on_remove}
-          on_date={on_date}
-          key={idx}
-        ></TableRow>
-      );
-    });
+  const rows = images.map((v: ImageListModel, idx: number) => {
+    return (
+      <TableRow
+        uid={v.id}
+        tags={v.tags}
+        size={v.size}
+        created={v.created}
+        on_remove={on_remove}
+        on_date={on_date}
+        key={idx}
+      ></TableRow>
+    );
+  });
 
   return (
     <table className='table table-sm table-striped'>
@@ -83,7 +67,7 @@ function TableRow({ uid, tags, size, created, on_remove, on_date }: Props) {
 
   const on_date_click = (e: any) => {
     e.preventDefault();
-    const [date, ..._] = created.split(' ');
+    const [date, ..._] = created.split(" ");
     on_date(date);
   };
 

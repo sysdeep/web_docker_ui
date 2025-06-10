@@ -1,8 +1,10 @@
-const humanize = require('humanize');
+// const humanize = require('humanize');
+// TODO
+import { filesize } from 'humanize';
 import { formatDate, parseISO } from 'date-fns';
 
 export function format_size(value: number): string {
-  return humanize.filesize(value);
+  return filesize(value);
 }
 
 // 2024-10-21T14:27:32.75462288Z -> 2024-10-21 17:27:32

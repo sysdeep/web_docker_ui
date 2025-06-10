@@ -65,7 +65,9 @@ export default function ServicePage() {
           {/* TODO */}
           {/* <DetailsFrame volume={service} /> */}
           {/* <ContainersFrame containers={service.containers} /> */}
-          <ContainerSpec container={service.spec.task_template.container_spec} />
+
+          {/* TODO: ошибка какая то */}
+          {/* <ContainerSpec container={service.spec.task_template.container_spec} /> */}
         </div>
       );
     }

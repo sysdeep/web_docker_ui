@@ -1,6 +1,5 @@
 import { join_url, route } from '@src/routes';
-import React from 'react';
-import { Link } from 'react-router-dom/dist';
+import { Link } from 'react-router-dom';
 
 export type TreeItemData = {
   id: string;

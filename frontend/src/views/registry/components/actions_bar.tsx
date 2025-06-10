@@ -1,7 +1,6 @@
 import IconRefresh from '@src/components/icon_refresh';
-import { join_url, route } from '@src/routes';
-import React from 'react';
-import { Link } from 'react-router-dom/dist';
+import { route } from '@src/routes';
+import { Link } from 'react-router-dom';
 
 type ActionsBarProps = {
   on_garbage(): void;
