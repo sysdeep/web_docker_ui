@@ -1,16 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import IconContainers from '../components/icon_containers';
-import IconImages from '../components/icon_images';
-import IconVolumes from '../components/icon_volumes';
-import IconNetworks from '../components/icon_networks';
-import IconConfigs from '../components/icon_configs';
-import IconSecrets from '../components/icon_secrets';
-import IconHome from '../components/icon_home';
-import { route } from '../routes';
-import IconRegistry from '@src/components/icon_registry';
-import IconServices from '@src/components/icon_services';
-import { useConfiguration } from '@src/store/configuration';
+import { Link } from "react-router-dom";
+import IconContainers from "../components/icon_containers";
+import IconImages from "../components/icon_images";
+import IconVolumes from "../components/icon_volumes";
+import IconNetworks from "../components/icon_networks";
+import IconConfigs from "../components/icon_configs";
+import IconSecrets from "../components/icon_secrets";
+import IconHome from "../components/icon_home";
+import { route } from "../routes";
+import IconRegistry from "@src/components/icon_registry";
+import IconServices from "@src/components/icon_services";
+import { useConfiguration } from "@src/store/configuration";
 
 export default function TopNavBar() {
   const { configuration } = useConfiguration();
@@ -19,7 +18,7 @@ export default function TopNavBar() {
     <nav className='navbar navbar-expand-lg bg-body-tertiary'>
       <div className='container-fluid'>
         <a className='navbar-brand' href='/'>
-          Go hdu
+          Docker WebUI
         </a>
         <button
           className='navbar-toggler'
@@ -36,7 +35,7 @@ export default function TopNavBar() {
           {/* nav links */}
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
             <li className='nav-item'>
-              <Link to={'/'} className='nav-link'>
+              <Link to={"/"} className='nav-link'>
                 <IconHome /> Main
               </Link>
             </li>
