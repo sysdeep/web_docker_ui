@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
-import { ApiContainerResponseModel } from '../../services/containers_service';
-import { route, join_url } from '../../routes';
+import { Link } from "react-router-dom";
+import { ApiContainerResponseModel } from "../../services/containers_service";
+import { route, join_url } from "../../routes";
 
 interface VolumesFrameProps {
   container: ApiContainerResponseModel;

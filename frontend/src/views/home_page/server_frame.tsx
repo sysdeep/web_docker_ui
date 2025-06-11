@@ -1,9 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ApiInfoModel } from '../../services/info_service';
-import { format_size } from '../../utils/humanize';
-import IconContainers from '../../components/icon_containers';
-import { route } from '../../routes';
+import { Link } from "react-router-dom";
+import { ApiInfoModel } from "../../services/info_service";
+import { format_size } from "../../utils/humanize";
+import IconContainers from "../../components/icon_containers";
+import { route } from "../../routes";
 
 interface ServerFrameProps {
   info: ApiInfoModel;

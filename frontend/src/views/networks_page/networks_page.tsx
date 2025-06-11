@@ -1,14 +1,10 @@
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import NetworksTable from './networks_table';
-import TotalReport from './total_report';
-import {
-  ApiNetworkListModel,
-  NetworksService,
-} from '../../services/networks_service';
-import IconNetworks from '../../components/icon_networks';
-import { useConfiguration } from '@src/store/configuration';
-import ButtonRefresh from '@src/components/button_refresh';
+import PageTitle from "../../components/page_title";
+import { useEffect, useMemo, useState } from "react";
+import NetworksTable from "./networks_table";
+import TotalReport from "./total_report";
+import { ApiNetworkListModel, NetworksService } from "../../services/networks_service";
+import IconNetworks from "../../components/icon_networks";
+import { useConfiguration } from "@src/store/configuration";
 
 export default function NetworksPage() {
   const { configuration } = useConfiguration();
@@ -34,7 +30,7 @@ export default function NetworksPage() {
   };
 
   useEffect(() => {
-    console.log('page networks mounted');
+    console.log("page networks mounted");
     refresh();
   }, []);
 
@@ -51,13 +47,9 @@ export default function NetworksPage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={refresh} isRefresh={loading}>
         <IconNetworks /> Networks
       </PageTitle>
-
-      <div>
-        <ButtonRefresh on_refresh={refresh} loading={loading} />
-      </div>
 
       {/* // TODO //{' '} */}
       {/* <div>

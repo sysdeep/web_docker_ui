@@ -1,5 +1,3 @@
-import React from 'react';
-
 type Props = {};
 export default function FrameLabels({}: Props) {
   // const items_view = env.map((row, idx) => {

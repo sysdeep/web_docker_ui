@@ -1,5 +1,4 @@
-import React from 'react';
-import IconRemove from './icon_remove';
+import IconRemove from "./icon_remove";
 
 interface ButtonRemoveProps {
   //   disabled: boolean;

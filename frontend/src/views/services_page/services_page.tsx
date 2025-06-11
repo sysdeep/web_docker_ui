@@ -1,12 +1,11 @@
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import TotalReport from './total_report';
-import { useConfiguration } from '@src/store/configuration';
-import ButtonRefresh from '@src/components/button_refresh';
-import IconServices from '@src/components/icon_services';
-import ServicesService from '@src/services/services_service';
-import ServicesTable from './services_table';
-import { Service } from '@src/models/service';
+import PageTitle from "../../components/page_title";
+import { useEffect, useMemo, useState } from "react";
+import TotalReport from "./total_report";
+import { useConfiguration } from "@src/store/configuration";
+import IconServices from "@src/components/icon_services";
+import ServicesService from "@src/services/services_service";
+import ServicesTable from "./services_table";
+import { Service } from "@src/models/service";
 
 export default function ServicesPage() {
   const { configuration } = useConfiguration();
@@ -27,12 +26,12 @@ export default function ServicesPage() {
   };
 
   useEffect(() => {
-    console.log('page services mounted');
+    console.log("page services mounted");
     refresh();
   }, []);
 
   const on_remove = (id: string) => {
-    console.log('TODO: service remove: ', id);
+    console.log("TODO: service remove: ", id);
     // services_service
     //   .remove_volume(name)
     //   .then(() => {
@@ -45,15 +44,9 @@ export default function ServicesPage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={refresh} isRefresh={loading}>
         <IconServices /> Services
       </PageTitle>
-
-      <div>
-        <div className='pull-right'>
-          <ButtonRefresh on_refresh={refresh} loading={loading} />
-        </div>
-      </div>
 
       <ServicesTable services={services} on_remove={on_remove} />
       <TotalReport total={services.length} />

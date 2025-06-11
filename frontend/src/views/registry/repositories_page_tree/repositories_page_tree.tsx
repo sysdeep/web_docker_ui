@@ -1,10 +1,10 @@
-import PageTitle from '@src/components/page_title';
-import { RegistryAction, RegistryService, RepositoryListModel } from '@src/services/registry_service';
-import { useConfiguration } from '@src/store/configuration';
-import React, { useEffect, useMemo, useState } from 'react';
-import ActionsBar from '../components/actions_bar';
-import IconRegistry from '@src/components/icon_registry';
-import TreeItem, { TreeItemData } from './tree_item';
+import PageTitle from "@src/components/page_title";
+import { RegistryAction, RegistryService, RepositoryListModel } from "@src/services/registry_service";
+import { useConfiguration } from "@src/store/configuration";
+import { useEffect, useMemo, useState } from "react";
+import ActionsBar from "../components/actions_bar";
+import IconRegistry from "@src/components/icon_registry";
+import TreeItem, { TreeItemData } from "./tree_item";
 
 export default function RepositoriesPageTree() {
   const { configuration } = useConfiguration();
@@ -30,7 +30,7 @@ export default function RepositoriesPageTree() {
   };
 
   useEffect(() => {
-    console.log('page repositories mounted');
+    console.log("page repositories mounted");
     refresh();
   }, []);
 
@@ -44,7 +44,7 @@ export default function RepositoriesPageTree() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={refresh} isRefresh={loading}>
         <IconRegistry /> Catalog tree
       </PageTitle>
 
@@ -57,13 +57,13 @@ export default function RepositoriesPageTree() {
 
 function to_tree(items: RepositoryListModel[]): TreeItemData {
   let root: TreeItemData = {
-    id: '',
-    name: 'root',
+    id: "",
+    name: "root",
     childrens: [],
   };
 
   for (let repo of items) {
-    const names = repo.name.split('/');
+    const names = repo.name.split("/");
     let root_node = root;
     for (let name_part of names) {
       let node = find_in_tree(root_node, name_part);

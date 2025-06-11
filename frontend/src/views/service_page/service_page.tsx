@@ -1,23 +1,15 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import DetailsFrame from './detailes_frame';
-import VolumesService, { ApiFullVolumeModel } from '../../services/volumes_service';
-import IconVolumes from '../../components/icon_volumes';
-import { route } from '@src/routes';
-import { useConfiguration } from '@src/store/configuration';
-import ContainersFrame from './containers_frame';
-import ButtonRemove from '@src/components/button_remove';
-import ButtonRefresh from '@src/components/button_refresh';
-import IconServices from '@src/components/icon_services';
-import ServicesService from '@src/services/services_service';
-import FrameEnv from './container_spec/frame_env';
-import { Service } from '@src/models/service';
-import ContainerSpec from './container_spec/container_spec';
+import { useParams } from "react-router-dom";
+import PageTitle from "../../components/page_title";
+import { useEffect, useMemo, useState } from "react";
+import { useConfiguration } from "@src/store/configuration";
+import ButtonRefresh from "@src/components/button_refresh";
+import IconServices from "@src/components/icon_services";
+import ServicesService from "@src/services/services_service";
+import { Service } from "@src/models/service";
 
 export default function ServicePage() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { configuration } = useConfiguration();
 
   const services_service = useMemo(() => {
@@ -26,8 +18,8 @@ export default function ServicePage() {
 
   const [service, setService] = useState<Service | null>(null);
 
-  const refresh = () => {
-    services_service.get_service(id).then(setService).catch(console.log);
+  const refresh = (uid: string) => {
+    services_service.get_service(uid).then(setService).catch(console.log);
   };
 
   // useEffect(() => {
@@ -35,21 +27,27 @@ export default function ServicePage() {
   // }, [service]);
 
   useEffect(() => {
-    console.log('page service mounted');
-    refresh();
+    console.log("page service mounted");
+    if (id) {
+      refresh(id);
+    }
   }, []);
 
-  const on_remove = () => {
-    console.log('TODO: remove service: ', id);
-    // services_service
-    //   .remove_volume(id)
-    //   .then(() => {
-    //     navigate(route.volumes);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  };
+  // const on_remove = () => {
+  //   console.log("TODO: remove service: ", id);
+  //   // services_service
+  //   //   .remove_volume(id)
+  //   //   .then(() => {
+  //   //     navigate(route.volumes);
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     console.log(err);
+  //   //   });
+  // };
+
+  if (!id) {
+    return <div>no id!!!</div>;
+  }
 
   const body = () => {
     if (service) {
@@ -59,7 +57,7 @@ export default function ServicePage() {
           <div className='pull-right'>
             {/* TODO */}
             {/* {service.containers.length === 0 && <ButtonRemove on_remove={on_remove} />} */}
-            <ButtonRefresh on_refresh={refresh} />
+            <ButtonRefresh on_refresh={() => refresh(id)} />
           </div>
 
           {/* TODO */}
@@ -77,7 +75,7 @@ export default function ServicePage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={() => refresh(id)}>
         <IconServices />
         &nbsp; Service: {id}
       </PageTitle>

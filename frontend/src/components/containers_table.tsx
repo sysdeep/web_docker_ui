@@ -1,10 +1,9 @@
-import { ApiContainerListModel } from '@src/models/api_container_list_model';
-import { join_url, route } from '@src/routes';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import ContainerStatusIcon from './container_status_icon';
-import { format_date } from '@src/utils/humanize';
-import { strip_container_name } from '@src/utils/containers';
+import { ApiContainerListModel } from "@src/models/api_container_list_model";
+import { join_url, route } from "@src/routes";
+import { Link } from "react-router-dom";
+import ContainerStatusIcon from "./container_status_icon";
+import { format_date } from "@src/utils/humanize";
+import { strip_container_name } from "@src/utils/containers";
 
 interface ContainersFrameProps {
   containers: ApiContainerListModel[];
@@ -23,7 +22,7 @@ export default function ContainersTable({ containers }: ContainersFrameProps) {
         <td>
           <Link to={join_url(route.image, container.image_id)}>{container.image}</Link>
         </td>
-        <td>{container.ip_addresses.join(', ')}</td>
+        <td>{container.ip_addresses.join(", ")}</td>
       </tr>
     );
   });

@@ -1,6 +1,5 @@
-import { ApiFullImageModel } from '../../services/images_service';
-import React from 'react';
-import { format_size } from '../../utils/humanize';
+import { ApiFullImageModel } from "../../services/images_service";
+import { format_size } from "../../utils/humanize";
 
 interface HistoryFrameProps {
   image: ApiFullImageModel;

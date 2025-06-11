@@ -1,6 +1,6 @@
-import ButtonRefresh from '@src/components/button_refresh';
-import ContainersService, { ApiContainerResponseModel, ContainerTopModel } from '@src/services/containers_service';
-import React, { useEffect, useState } from 'react';
+import ButtonRefresh from "@src/components/button_refresh";
+import ContainersService, { ApiContainerResponseModel, ContainerTopModel } from "@src/services/containers_service";
+import { useEffect, useState } from "react";
 
 type StatsFrameProps = {
   container: ApiContainerResponseModel | null;
@@ -13,7 +13,7 @@ export default function StatsFrame({ container, containers_service }: StatsFrame
   const [containerTop, setContainerTop] = useState<ContainerTopModel | null>(null);
 
   const refresh_stats = () => {
-    if (container.state.status === 'running') {
+    if (container && container.state.status === "running") {
       setLoading(true);
       containers_service
         .get_container_stats(container.container.id)

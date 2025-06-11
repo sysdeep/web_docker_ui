@@ -1,17 +1,12 @@
-import React from 'react';
-import { format_size } from '../../utils/humanize';
-import { ApiFullNetworkModel } from '../../services/networks_service';
-import ButtonRemove from '@src/components/button_remove';
+import { ApiFullNetworkModel } from "../../services/networks_service";
+import ButtonRemove from "@src/components/button_remove";
 
 interface DetailsFrameProps {
   network: ApiFullNetworkModel;
   on_remove(): void;
 }
 
-export default function DetailsFrame({
-  network,
-  on_remove,
-}: DetailsFrameProps) {
+export default function DetailsFrame({ network, on_remove }: DetailsFrameProps) {
   return (
     <div>
       <h2>Details</h2>
@@ -40,15 +35,15 @@ export default function DetailsFrame({
             </tr>
             <tr>
               <td>Internal</td>
-              <td>{network.network.internal ? 'yes' : 'no'}</td>
+              <td>{network.network.internal ? "yes" : "no"}</td>
             </tr>
             <tr>
               <td>Attachable</td>
-              <td>{network.network.attachable ? 'yes' : 'no'}</td>
+              <td>{network.network.attachable ? "yes" : "no"}</td>
             </tr>
             <tr>
               <td>Ingress</td>
-              <td>{network.network.ingress ? 'yes' : 'no'}</td>
+              <td>{network.network.ingress ? "yes" : "no"}</td>
             </tr>
           </tbody>
         </table>

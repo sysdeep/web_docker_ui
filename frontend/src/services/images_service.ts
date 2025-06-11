@@ -1,50 +1,4 @@
-import { join_url } from '@src/routes';
-import ImageListModel from '../models/image_list_model';
-import { ApiContainerListModel } from '@src/models/api_container_list_model';
-
-export default class ImagesService {
-  private base_url: string;
-
-  constructor(base_url: string) {
-    this.base_url = base_url;
-    console.log('images_service created');
-  }
-
-  async get_images(): Promise<ImageListModel[]> {
-    const response = await fetch(join_url(this.base_url, '/api/images'));
-
-    const data = (await response.json()) as ApiImagesListModel;
-
-    const images = data.images || [];
-    const dataset = images.map((model) => {
-      const dmodel: ImageListModel = {
-        id: model.id,
-        created: model.created,
-        tags: model.tags,
-        size: model.size,
-      };
-      return dmodel;
-    });
-
-    return dataset;
-  }
-
-  async get_image(id: string): Promise<ApiFullImageModel> {
-    const response = (await fetch(join_url(this.base_url, '/api/images/' + id)).then((data) =>
-      data.json(),
-    )) as ApiFullImageModel;
-
-    return response;
-  }
-
-  async remove_image(id: string): Promise<void> {
-    await fetch(join_url(this.base_url, '/api/images/' + id), {
-      method: 'DELETE',
-    });
-
-    return;
-  }
-}
+import { ApiContainerListModel } from "@src/models/api_container_list_model";
 
 // images list ----------------------------------------------------------------
 interface ApiImageListModel {
@@ -55,10 +9,10 @@ interface ApiImageListModel {
   size: number;
 }
 
-interface ApiImagesListModel {
+export type ApiImagesListModel = {
   images: ApiImageListModel[];
   total: number;
-}
+};
 
 // image models ---------------------------------------------------------------
 interface ApiImageModel {

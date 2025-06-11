@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import ClientFrame from './client_frame';
-import ServerFrame from './server_frame';
-import SwarmFrame from './swarm_frame';
-import InfoService, { ApiInfoModel } from '../../services/info_service';
-import { useConfiguration } from '@src/store/configuration';
+import { useEffect, useMemo, useState } from "react";
+import ClientFrame from "./client_frame";
+import ServerFrame from "./server_frame";
+import SwarmFrame from "./swarm_frame";
+import InfoService, { ApiInfoModel } from "../../services/info_service";
+import { useConfiguration } from "@src/store/configuration";
 
 export default function HomePage() {
   const { configuration } = useConfiguration();

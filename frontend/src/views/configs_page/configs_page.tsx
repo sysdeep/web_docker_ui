@@ -1,14 +1,10 @@
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import TotalReport from './total_report';
-import {
-  ApiConfigListModel,
-  ConfigsServices,
-} from '../../services/configs_service';
-import IconConfigs from '../../components/icon_configs';
-import ConfigsTable from './configs_table';
-import { useConfiguration } from '@src/store/configuration';
-import ButtonRefresh from '@src/components/button_refresh';
+import PageTitle from "../../components/page_title";
+import { useEffect, useMemo, useState } from "react";
+import TotalReport from "./total_report";
+import { ApiConfigListModel, ConfigsServices } from "../../services/configs_service";
+import IconConfigs from "../../components/icon_configs";
+import ConfigsTable from "./configs_table";
+import { useConfiguration } from "@src/store/configuration";
 
 export default function ConfigsPage() {
   const { configuration } = useConfiguration();
@@ -34,7 +30,7 @@ export default function ConfigsPage() {
   };
 
   useEffect(() => {
-    console.log('page configs mounted');
+    console.log("page configs mounted");
     refresh();
   }, []);
 
@@ -51,13 +47,9 @@ export default function ConfigsPage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={refresh} isRefresh={loading}>
         <IconConfigs /> Configs
       </PageTitle>
-
-      <div>
-        <ButtonRefresh on_refresh={refresh} loading={loading} />
-      </div>
 
       {/* // TODO //{' '} */}
       {/* <div>

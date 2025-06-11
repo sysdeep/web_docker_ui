@@ -1,7 +1,6 @@
-import { join_url, route } from '@src/routes';
-import { RepositoryModel } from '@src/services/registry_service';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { join_url, route } from "@src/routes";
+import { RepositoryModel } from "@src/services/registry_service";
+import { Link } from "react-router-dom";
 
 type RepositoryNavFrameProps = {
   repository: RepositoryModel;
@@ -15,7 +14,7 @@ export default function RepositoryNavFrame({ repository }: RepositoryNavFramePro
     .map((tag, idx) => {
       return (
         <span key={idx} className='mx-2'>
-          <Link to={join_url(route.registry_repository_tag, repository.id + '/' + tag)}>{tag}</Link>
+          <Link to={join_url(route.registry_repository_tag, repository.id + "/" + tag)}>{tag}</Link>
         </span>
       );
     });

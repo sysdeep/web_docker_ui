@@ -1,7 +1,6 @@
-import { ApiFullImageModel } from '../../services/images_service';
-import React from 'react';
-import { format_size } from '../../utils/humanize';
-import ButtonRemove from '@src/components/button_remove';
+import { ApiFullImageModel } from "../../services/images_service";
+import { format_size } from "../../utils/humanize";
+import ButtonRemove from "@src/components/button_remove";
 
 interface DetailsFrameProps {
   image: ApiFullImageModel;

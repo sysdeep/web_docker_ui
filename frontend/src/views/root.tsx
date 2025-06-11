@@ -1,4 +1,3 @@
-import React from 'react';
 export default function Root() {
   return (
     <>
@@ -6,13 +5,7 @@ export default function Root() {
         <h1>React Router Contacts</h1>
         <div>
           <form id='search-form' role='search'>
-            <input
-              id='q'
-              aria-label='Search contacts'
-              placeholder='Search'
-              type='search'
-              name='q'
-            />
+            <input id='q' aria-label='Search contacts' placeholder='Search' type='search' name='q' />
             <div id='search-spinner' aria-hidden hidden={true} />
             <div className='sr-only' aria-live='polite'></div>
           </form>

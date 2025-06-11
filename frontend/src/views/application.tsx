@@ -1,6 +1,5 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import TopNavBar from './top_nav_bar';
+import { Outlet } from "react-router-dom";
+import TopNavBar from "./top_nav_bar";
 
 export default function Application() {
   return (

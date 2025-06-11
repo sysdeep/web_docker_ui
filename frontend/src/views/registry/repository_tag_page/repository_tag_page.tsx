@@ -1,13 +1,13 @@
-import PageTitle from '@src/components/page_title';
-import { RegistryService, RepositoryModel, TagManifest } from '@src/services/registry_service';
-import { useConfiguration } from '@src/store/configuration';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import DetailsFrame from './details_frame';
-import RepositoryNavFrame from '../components/reposytory_nav_frame';
-import ButtonRemove from '@src/components/button_remove';
-import { join_url, route } from '@src/routes';
-import IconRegistry from '@src/components/icon_registry';
+import PageTitle from "@src/components/page_title";
+import { RegistryService, RepositoryModel, TagManifest } from "@src/services/registry_service";
+import { useConfiguration } from "@src/store/configuration";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import DetailsFrame from "./details_frame";
+import RepositoryNavFrame from "../components/reposytory_nav_frame";
+import ButtonRemove from "@src/components/button_remove";
+import { join_url, route } from "@src/routes";
+import IconRegistry from "@src/components/icon_registry";
 // import RepositoryFrame from './repository_frame';
 
 export default function RepositoryTagPage() {
@@ -23,10 +23,10 @@ export default function RepositoryTagPage() {
   const [repository, setReposytory] = useState<RepositoryModel | null>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const refresh = () => {
+  const refresh = (uid: string, utag: string) => {
     setLoading(true);
     registry_service
-      .get_repository_tag(id, tag)
+      .get_repository_tag(uid, utag)
       .then((repo) => {
         setManifest(repo.tag_manifest);
         setReposytory(repo.repository);
@@ -38,8 +38,10 @@ export default function RepositoryTagPage() {
   };
 
   useEffect(() => {
-    console.log('page repository tag mounted');
-    refresh();
+    console.log("page repository tag mounted");
+    if (id && tag) {
+      refresh(id, tag);
+    }
   }, [tag]);
 
   // const on_repository_remove = () => {
@@ -70,14 +72,22 @@ export default function RepositoryTagPage() {
     }
   };
 
-  let page_name = '';
-  if (repository && manifest) {
-    page_name = `${repository.name}:${manifest.name}`;
+  // let page_name = '';
+  // if (repository && manifest) {
+  //   page_name = `${repository.name}:${manifest.name}`;
+  // }
+
+  if (!id) {
+    return <div>no id!!!</div>;
+  }
+
+  if (!tag) {
+    return <div>no tag!!!</div>;
   }
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={() => refresh(id, tag)} isRefresh={loading}>
         <IconRegistry /> Tag info
       </PageTitle>
 

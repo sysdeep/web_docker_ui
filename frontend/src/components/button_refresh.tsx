@@ -1,5 +1,4 @@
-import React from 'react';
-import IconRefresh from './icon_refresh';
+import IconRefresh from "./icon_refresh";
 
 type ButtonRemoveProps = {
   //   disabled: boolean;
@@ -18,12 +17,7 @@ export default function ButtonRefresh({
 
   return (
     <button className='btn btn-secondary' onClick={on_click}>
-      {loading && (
-        <span
-          className='spinner-grow spinner-grow-sm'
-          aria-hidden='true'
-        ></span>
-      )}
+      {loading && <span className='spinner-grow spinner-grow-sm' aria-hidden='true'></span>}
       {!loading && <IconRefresh />} Refresh
     </button>
   );

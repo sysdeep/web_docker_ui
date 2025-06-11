@@ -1,6 +1,5 @@
-import React from 'react';
-import { ApiFullConfigModel } from '../../services/configs_service';
-import ButtonRemove from '../../components/button_remove';
+import { ApiFullConfigModel } from "../../services/configs_service";
+import ButtonRemove from "../../components/button_remove";
 
 interface DetailsFrameProps {
   config: ApiFullConfigModel;

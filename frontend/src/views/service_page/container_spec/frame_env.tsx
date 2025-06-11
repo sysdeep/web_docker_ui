@@ -1,11 +1,9 @@
-import React from 'react';
-
 type Props = {
   env: string[];
 };
 export default function FrameEnv({ env }: Props) {
   const items_view = env.map((row, idx) => {
-    const [key, value] = row.split('=');
+    const [key, value] = row.split("=");
     return (
       <tr key={idx}>
         <td>{key}</td>

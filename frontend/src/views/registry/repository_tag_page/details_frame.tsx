@@ -1,15 +1,11 @@
-import { RepositoryModel, TagManifest } from '@src/services/registry_service';
-import { format_size } from '@src/utils/humanize';
-import React from 'react';
+import { RepositoryModel, TagManifest } from "@src/services/registry_service";
+import { format_size } from "@src/utils/humanize";
 
 type DetailsFrameProps = {
   manifest: TagManifest;
   repository: RepositoryModel;
 };
-export default function DetailsFrame({
-  manifest,
-  repository,
-}: DetailsFrameProps) {
+export default function DetailsFrame({ manifest, repository }: DetailsFrameProps) {
   return (
     <div>
       <div>

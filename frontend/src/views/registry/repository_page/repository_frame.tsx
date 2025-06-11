@@ -1,9 +1,7 @@
-import ButtonRemove from '@src/components/button_remove';
-import IconRemove from '@src/components/icon_remove';
-import { join_url, route } from '@src/routes';
-import { RepositoryModel } from '@src/services/registry_service';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import IconRemove from "@src/components/icon_remove";
+import { join_url, route } from "@src/routes";
+import { RepositoryModel } from "@src/services/registry_service";
+import { Link } from "react-router-dom";
 
 type RepositoryFrameProps = {
   repository: RepositoryModel;
@@ -11,18 +9,18 @@ type RepositoryFrameProps = {
   on_tag_remove(tag: string): void;
 };
 
-export default function RepositoryFrame({ repository, on_repository_remove, on_tag_remove }: RepositoryFrameProps) {
-  const tags_view = repository.tags
-    .sort((a, b) => {
-      return a > b ? 1 : -1;
-    })
-    .map((tag, idx) => {
-      return (
-        <span key={idx} className='mx-2'>
-          [{tag}]
-        </span>
-      );
-    });
+export default function RepositoryFrame({ repository, on_tag_remove }: RepositoryFrameProps) {
+  // const tags_view = repository.tags
+  //   .sort((a, b) => {
+  //     return a > b ? 1 : -1;
+  //   })
+  //   .map((tag, idx) => {
+  //     return (
+  //       <span key={idx} className='mx-2'>
+  //         [{tag}]
+  //       </span>
+  //     );
+  //   });
 
   //   const on_tag_remove = (tag: string) => {
   //     console.log(tag);
@@ -60,7 +58,7 @@ function TagsTable({ repository, on_remove }: TagsTableProps) {
       return (
         <tr key={idx}>
           <td>
-            <Link to={join_url(route.registry_repository_tag, repository.id + '/' + tag)}>{tag}</Link>
+            <Link to={join_url(route.registry_repository_tag, repository.id + "/" + tag)}>{tag}</Link>
           </td>
           <td className='text-center'>
             <a href='#' onClick={(e) => on_remove_clicked(e, tag)}>

@@ -1,6 +1,5 @@
-import React from 'react';
-import { ApiNetworkContainerModel } from '../../services/networks_service';
-import { Link } from 'react-router-dom';
+import { ApiNetworkContainerModel } from "../../services/networks_service";
+import { Link } from "react-router-dom";
 
 interface ContainersFrameProps {
   containers: ApiNetworkContainerModel[];
@@ -10,7 +9,7 @@ export default function ContainersFrame({ containers }: ContainersFrameProps) {
     return (
       <tr key={idx}>
         <td>
-          <Link to={'/container/' + container.id}> {container.name} </Link>
+          <Link to={"/container/" + container.id}> {container.name} </Link>
         </td>
         <td>{container.mac_address}</td>
         <td>{container.ip_v4_address}</td>

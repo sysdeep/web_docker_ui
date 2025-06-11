@@ -1,9 +1,8 @@
-import React from 'react';
-import { ApiContainerResponseModel } from '../../services/containers_service';
-import { format_date } from '@src/utils/humanize';
-import ContainerStatusIcon from '@src/components/container_status_icon';
-import { strip_container_name } from '@src/utils/containers';
-import ActionsFrame from './actions_frame';
+import { ApiContainerResponseModel } from "../../services/containers_service";
+import { format_date } from "@src/utils/humanize";
+import ContainerStatusIcon from "@src/components/container_status_icon";
+import { strip_container_name } from "@src/utils/containers";
+import ActionsFrame from "./actions_frame";
 
 interface StatusFrameProps {
   container: ApiContainerResponseModel;
@@ -32,7 +31,7 @@ export default function StatusFrame({ container, on_action }: StatusFrameProps) 
               </tr>
               <tr>
                 <td>Ip address</td>
-                <td>{ip_adresses.join(', ')}</td>
+                <td>{ip_adresses.join(", ")}</td>
               </tr>
               <tr>
                 <td>Status</td>

@@ -1,6 +1,5 @@
-import React from 'react';
-import { ApiFullSecretModel } from '../../services/secrets_service';
-import ButtonRemove from '@src/components/button_remove';
+import { ApiFullSecretModel } from "../../services/secrets_service";
+import ButtonRemove from "@src/components/button_remove";
 
 interface DetailsFrameProps {
   secret: ApiFullSecretModel;

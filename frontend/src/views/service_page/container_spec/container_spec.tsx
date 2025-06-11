@@ -1,11 +1,12 @@
-import { ContainerSpec } from '@src/models/service';
-import FrameEnv from './frame_env';
-import FrameContainer from './frame_container';
-import FrameLabels from './frame_labels';
-import FrameMounts from './frame_mounts';
+// import { ContainerSpec } from '@src/models/service';
+import FrameEnv from "./frame_env";
+import FrameContainer from "./frame_container";
+import FrameLabels from "./frame_labels";
+import FrameMounts from "./frame_mounts";
 
 type Props = {
-  container: ContainerSpec;
+  // container: ContainerSpec;
+  container: any;
 };
 
 export default function ContainerSpec({ container }: Props) {

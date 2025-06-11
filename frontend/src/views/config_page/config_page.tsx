@@ -1,14 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import DetailsFrame from './detailes_frame';
-import {
-  ApiFullConfigModel,
-  ConfigsServices,
-} from '../../services/configs_service';
-import IconConfigs from '../../components/icon_configs';
-import { route } from '../../routes';
-import { useConfiguration } from '@src/store/configuration';
+import { useParams, useNavigate } from "react-router-dom";
+import PageTitle from "../../components/page_title";
+import { useEffect, useMemo, useState } from "react";
+import DetailsFrame from "./detailes_frame";
+import { ApiFullConfigModel, ConfigsServices } from "../../services/configs_service";
+import IconConfigs from "../../components/icon_configs";
+import { route } from "../../routes";
+import { useConfiguration } from "@src/store/configuration";
 
 export default function ConfigPage() {
   const { id } = useParams();
@@ -21,9 +18,9 @@ export default function ConfigPage() {
 
   const [config, setConfig] = useState<ApiFullConfigModel | null>(null);
 
-  const refresh = () => {
+  const refresh = (uid: string) => {
     config_service
-      .get_config(id)
+      .get_config(uid)
       .then((config) => {
         setConfig(config);
       })
@@ -33,16 +30,18 @@ export default function ConfigPage() {
   };
 
   useEffect(() => {
-    console.log('page config mounted');
-    refresh();
+    console.log("page config mounted");
+    if (id) {
+      refresh(id);
+    }
   }, []);
 
   const on_remove = () => {
-    if (config) {
+    if (config && id) {
       config_service
         .remove_config(id)
         .then(() => {
-          console.log('remove ok');
+          console.log("remove ok");
           navigate(route.configs);
         })
         .catch((err) => {
@@ -50,6 +49,10 @@ export default function ConfigPage() {
         });
     }
   };
+
+  if (!id) {
+    return <div>no id!!!</div>;
+  }
 
   const body = () => {
     if (config) {
@@ -67,7 +70,7 @@ export default function ConfigPage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={() => refresh(id)}>
         <IconConfigs />
         &nbsp; Config: {page_title}
       </PageTitle>

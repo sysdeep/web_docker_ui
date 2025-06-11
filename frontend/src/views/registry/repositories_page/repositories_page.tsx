@@ -1,11 +1,11 @@
-import PageTitle from '@src/components/page_title';
-import { join_url, route } from '@src/routes';
-import { RegistryAction, RegistryService, RepositoryListModel } from '@src/services/registry_service';
-import { useConfiguration } from '@src/store/configuration';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import ActionsBar from '../components/actions_bar';
-import IconRegistry from '@src/components/icon_registry';
+import PageTitle from "@src/components/page_title";
+import { join_url, route } from "@src/routes";
+import { RegistryAction, RegistryService, RepositoryListModel } from "@src/services/registry_service";
+import { useConfiguration } from "@src/store/configuration";
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import ActionsBar from "../components/actions_bar";
+import IconRegistry from "@src/components/icon_registry";
 
 export default function RepositoriesPage() {
   const { configuration } = useConfiguration();
@@ -31,7 +31,7 @@ export default function RepositoriesPage() {
   };
 
   useEffect(() => {
-    console.log('page repositories mounted');
+    console.log("page repositories mounted");
     refresh();
   }, []);
 
@@ -45,7 +45,7 @@ export default function RepositoriesPage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={refresh} isRefresh={loading}>
         <IconRegistry /> Catalog
       </PageTitle>
 

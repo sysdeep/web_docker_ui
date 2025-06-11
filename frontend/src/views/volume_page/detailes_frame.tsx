@@ -1,9 +1,4 @@
-import { ApiFullImageModel } from '../../services/images_service';
-import React from 'react';
-import { format_size } from '../../utils/humanize';
-import { ApiFullVolumeModel } from '../../services/volumes_service';
-import ButtonRemove from '@src/components/button_remove';
-import { ApiContainerListModel } from '@src/models/api_container_list_model';
+import { ApiFullVolumeModel } from "../../services/volumes_service";
 
 interface DetailsFrameProps {
   volume: ApiFullVolumeModel;

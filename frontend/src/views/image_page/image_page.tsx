@@ -1,44 +1,41 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import IconImages from '../../components/icon_images';
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import DetailsFrame from './detailes_frame';
-import ContainersFrame from './containers_frame';
-import HistoryFrame from './history_frame';
-import ImagesService, { ApiFullImageModel } from '../../services/images_service';
-import { route } from '@src/routes';
-import { useConfiguration } from '@src/store/configuration';
-import ButtonRefresh from '@src/components/button_refresh';
+import { useNavigate, useParams } from "react-router-dom";
+import IconImages from "../../components/icon_images";
+import PageTitle from "../../components/page_title";
+import { useEffect, useState } from "react";
+import DetailsFrame from "./detailes_frame";
+import ContainersFrame from "./containers_frame";
+import HistoryFrame from "./history_frame";
+import { ApiFullImageModel } from "../../services/images_service";
+import { route } from "@src/routes";
+import { useConfiguration } from "@src/store/configuration";
+import useImagesService from "@src/services/useImagesService";
 
 export default function ImagePage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { configuration } = useConfiguration();
-
-  const images_service = useMemo(() => {
-    return new ImagesService(configuration.base_url);
-  }, []);
+  const { get_image, remove_image } = useImagesService(configuration.base_url);
 
   const [image, setImage] = useState<ApiFullImageModel | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const refresh = () => {
+  const refresh = (uid: string) => {
     setLoading(false);
-    images_service
-      .get_image(id)
+    get_image(uid)
       .then(setImage)
       .catch(console.log)
       .finally(() => setLoading(false));
   };
 
   useEffect(() => {
-    console.log('page image mounted');
-    refresh();
+    console.log("page image mounted");
+    if (id) {
+      refresh(id);
+    }
   }, []);
 
-  const on_remove = () => {
-    images_service
-      .remove_image(id)
+  const on_remove = (uid: string) => {
+    remove_image(uid)
       .then(() => {
         navigate(route.images);
       })
@@ -47,11 +44,15 @@ export default function ImagePage() {
       });
   };
 
+  if (!id) {
+    return <div>no id!!!</div>;
+  }
+
   const body = () => {
-    if (image) {
+    if (id && image) {
       return (
         <div>
-          <DetailsFrame image={image} on_remove={on_remove} />
+          <DetailsFrame image={image} on_remove={() => on_remove(id)} />
           <ContainersFrame containers={image.containers} />
           <HistoryFrame image={image} />
         </div>
@@ -61,19 +62,15 @@ export default function ImagePage() {
     return <p>no image</p>;
   };
 
-  const [, image_hash] = id.split(':');
+  const [, image_hash] = id.split(":");
   const page_title = image_hash.slice(0, 12);
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={() => refresh(id)} isRefresh={loading}>
         <IconImages />
         &nbsp; Image: {page_title}
       </PageTitle>
-
-      <div>
-        <ButtonRefresh on_refresh={refresh} loading={loading} />
-      </div>
 
       {body()}
     </div>

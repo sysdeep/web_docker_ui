@@ -1,20 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import PageTitle from "../../components/page_title";
 import ImagesTable from "./images_table";
 import ImageListModel from "../../models/image_list_model";
-import ImagesService from "../../services/images_service";
 import FilterPanel from "./filter_panel";
 import FilterModel from "./filter_model";
 import TotalReport from "./total_report";
 import IconImages from "../../components/icon_images";
 import { useConfiguration } from "@src/store/configuration";
-import ButtonRefresh from "@src/components/button_refresh";
+import useImagesService from "@src/services/useImagesService";
 
 export default function ImagesPage() {
   const { configuration } = useConfiguration();
-  const images_service = useMemo(() => {
-    return new ImagesService(configuration.base_url);
-  }, []);
+  const { get_images, remove_image } = useImagesService(configuration.base_url);
 
   const [images, setImages] = useState<ImageListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,8 +19,7 @@ export default function ImagesPage() {
 
   const refresh = () => {
     setLoading(true);
-    images_service
-      .get_images()
+    get_images()
       .then((images: ImageListModel[]) => {
         setImages(images);
       })
@@ -40,9 +36,8 @@ export default function ImagesPage() {
     refresh();
   }, []);
 
-  const remove_image = (id: string) => {
-    images_service
-      .remove_image(id)
+  const do_remove_image = (id: string) => {
+    remove_image(id)
       .then(() => {
         refresh();
       })
@@ -86,14 +81,14 @@ export default function ImagesPage() {
 
   return (
     <div>
-      <PageTitle>
-        <IconImages /> Images
+      <PageTitle onRefresh={refresh} isRefresh={loading}>
+        <IconImages /> Images{" "}
       </PageTitle>
       <FilterPanel filter={filter} onChange={on_filter_changed} />
-      <div>
+      {/* <div>
         <ButtonRefresh on_refresh={refresh} loading={loading} />
-      </div>
-      <ImagesTable images={images_to_render} on_remove={remove_image} on_date={on_date} />
+      </div> */}
+      <ImagesTable images={images_to_render} on_remove={do_remove_image} on_date={on_date} />
       <TotalReport total={images_to_render.length} />
     </div>
   );

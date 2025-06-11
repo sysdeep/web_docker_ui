@@ -1,5 +1,4 @@
-import { ContainerSpec } from '@src/models/service';
-import React from 'react';
+import { ContainerSpec } from "@src/models/service";
 
 type Props = {
   container: ContainerSpec;

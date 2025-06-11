@@ -1,14 +1,11 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import DetailsFrame from './detailes_frame';
-import {
-  ApiFullSecretModel,
-  SecretsService,
-} from '../../services/secrets_service';
-import IconSecrets from '../../components/icon_secrets';
-import { route } from '@src/routes';
-import { useConfiguration } from '@src/store/configuration';
+import { useNavigate, useParams } from "react-router-dom";
+import PageTitle from "../../components/page_title";
+import { useEffect, useMemo, useState } from "react";
+import DetailsFrame from "./detailes_frame";
+import { ApiFullSecretModel, SecretsService } from "../../services/secrets_service";
+import IconSecrets from "../../components/icon_secrets";
+import { route } from "@src/routes";
+import { useConfiguration } from "@src/store/configuration";
 
 export default function SecretPage() {
   const { id } = useParams();
@@ -21,9 +18,9 @@ export default function SecretPage() {
 
   const [secret, setSecret] = useState<ApiFullSecretModel | null>(null);
 
-  const refresh = () => {
+  const refresh = (uid: string) => {
     secret_service
-      .get_secret(id)
+      .get_secret(uid)
       .then((secret) => {
         setSecret(secret);
       })
@@ -33,15 +30,17 @@ export default function SecretPage() {
   };
 
   useEffect(() => {
-    refresh();
+    if (id) {
+      refresh(id);
+    }
   }, []);
 
   const on_remove = () => {
-    if (secret) {
+    if (secret && id) {
       secret_service
         .remove_secret(id)
         .then(() => {
-          console.log('remove ok');
+          console.log("remove ok");
           navigate(route.secrets);
         })
         .catch((err) => {
@@ -49,6 +48,10 @@ export default function SecretPage() {
         });
     }
   };
+
+  if (!id) {
+    return <div>no id!!!</div>;
+  }
 
   const body = () => {
     if (secret) {
@@ -66,7 +69,7 @@ export default function SecretPage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={() => refresh(id)}>
         <IconSecrets />
         &nbsp; Secret: {page_name}
       </PageTitle>

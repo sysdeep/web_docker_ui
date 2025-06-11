@@ -1,19 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import StatusFrame from './status_frame';
-import PageTitle from '../../components/page_title';
-import ContainersService, { ApiContainerResponseModel, ContainerTopModel } from '../../services/containers_service';
-import DetailsFrame from './details_frame';
-import VolumesFrame from './volumes_frame';
-import NetworksFrame from './networks_frame';
-import IconContainers from '../../components/icon_containers';
-import { useConfiguration } from '@src/store/configuration';
-import ButtonRefresh from '@src/components/button_refresh';
-import TopFrame from './top_frame';
-import { route } from '@src/routes';
-// import StatsFrame from './stats_frame';
-import { strip_container_name } from '@src/utils/containers';
+import StatusFrame from "./status_frame";
+import PageTitle from "../../components/page_title";
+import ContainersService, { ApiContainerResponseModel } from "../../services/containers_service";
+import DetailsFrame from "./details_frame";
+import VolumesFrame from "./volumes_frame";
+import NetworksFrame from "./networks_frame";
+import IconContainers from "../../components/icon_containers";
+import { useConfiguration } from "@src/store/configuration";
+import TopFrame from "./top_frame";
+import { route } from "@src/routes";
+import { strip_container_name } from "@src/utils/containers";
 
 export default function ContainerPage() {
   const { id } = useParams();
@@ -27,10 +25,10 @@ export default function ContainerPage() {
   const [container, setContainer] = useState<ApiContainerResponseModel | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const refresh = () => {
+  const refresh = (uid: string) => {
     setLoading(true);
     containers_service
-      .get_container(id)
+      .get_container(uid)
       .then((data) => {
         setContainer(data);
         // refresh_top();
@@ -44,21 +42,27 @@ export default function ContainerPage() {
   };
 
   useEffect(() => {
-    console.log('container page mounted');
-    refresh();
+    console.log("container page mounted");
+    if (id) {
+      refresh(id);
+    }
   }, []);
 
   const on_action = (action: string) => {
     if (id) {
       containers_service.container_action(id, action).then(() => {
-        if (action === 'remove') {
+        if (action === "remove") {
           navigate(route.containers);
         } else {
-          refresh();
+          refresh(id);
         }
       });
     }
   };
+
+  if (!id) {
+    return <div>no id!!!</div>;
+  }
 
   const main_body = () => {
     if (container === null) {
@@ -102,12 +106,10 @@ export default function ContainerPage() {
 
   return (
     <div>
-      <PageTitle>
-        <IconContainers /> Container: {container ? strip_container_name(container.container.name) : 'loading'}
+      <PageTitle onRefresh={() => refresh(id)} isRefresh={loading}>
+        <IconContainers /> Container: {container ? strip_container_name(container.container.name) : "loading"}
       </PageTitle>
-      <div>
-        <ButtonRefresh on_refresh={refresh} loading={loading} />
-      </div>
+
       {main_body()}
     </div>
   );

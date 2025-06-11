@@ -1,18 +1,14 @@
-import { Link } from 'react-router-dom';
-import { ApiSecretListModel } from '../../services/secrets_service';
-import React from 'react';
-import { route, join_url } from '../../routes';
-import IconRemove from '@src/components/icon_remove';
+import { Link } from "react-router-dom";
+import { ApiSecretListModel } from "../../services/secrets_service";
+import { route, join_url } from "../../routes";
+import IconRemove from "@src/components/icon_remove";
 
 interface SecretsTableProps {
   secrets: ApiSecretListModel[];
   on_remove(id: string): void;
 }
 
-export default function SecretsTable({
-  secrets,
-  on_remove,
-}: SecretsTableProps) {
+export default function SecretsTable({ secrets, on_remove }: SecretsTableProps) {
   const on_remove_click = (e: any, id: string) => {
     e.preventDefault();
     on_remove(id);
@@ -27,11 +23,7 @@ export default function SecretsTable({
         <td> {secret.created} </td>
         <td> {secret.updated} </td>
         <td>
-          <a
-            href='#'
-            className='error'
-            onClick={(e) => on_remove_click(e, secret.id)}
-          >
+          <a href='#' className='error' onClick={(e) => on_remove_click(e, secret.id)}>
             <IconRemove />
             &nbsp; Remove
           </a>

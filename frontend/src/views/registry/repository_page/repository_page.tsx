@@ -1,15 +1,15 @@
-import PageTitle from '@src/components/page_title';
-import { RegistryService, RepositoryModel } from '@src/services/registry_service';
-import { useConfiguration } from '@src/store/configuration';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
-import RepositoryFrame from './repository_frame';
-import RepositoryNavFrame from '../components/reposytory_nav_frame';
-import IconRegistry from '@src/components/icon_registry';
+import PageTitle from "@src/components/page_title";
+import { RegistryService, RepositoryModel } from "@src/services/registry_service";
+import { useConfiguration } from "@src/store/configuration";
+import { useEffect, useMemo, useState } from "react";
+import { Outlet, useParams } from "react-router-dom";
+import RepositoryFrame from "./repository_frame";
+import RepositoryNavFrame from "../components/reposytory_nav_frame";
+import IconRegistry from "@src/components/icon_registry";
 
 export default function RepositoryPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { configuration } = useConfiguration();
 
   const registry_service = useMemo(() => {
@@ -19,10 +19,10 @@ export default function RepositoryPage() {
   const [repository, setRepository] = useState<RepositoryModel | null>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const refresh = () => {
+  const refresh = (uid: string) => {
     setLoading(true);
     registry_service
-      .get_repository(id)
+      .get_repository(uid)
       .then((repo) => {
         setRepository(repo);
       })
@@ -33,12 +33,14 @@ export default function RepositoryPage() {
   };
 
   useEffect(() => {
-    console.log('page repository mounted');
-    refresh();
+    console.log("page repository mounted");
+    if (id) {
+      refresh(id);
+    }
   }, []);
 
   const on_repository_remove = () => {
-    console.log('repo remove page');
+    console.log("repo remove page");
     // if (secret) {
     //   secret_service
     //     .remove_secret(id)
@@ -53,12 +55,12 @@ export default function RepositoryPage() {
   };
 
   const on_tag_remove = (tag: string) => {
-    console.log('tag remove page: ' + tag);
-    if (repository) {
+    console.log("tag remove page: " + tag);
+    if (repository && id) {
       registry_service
         .remove_tag(repository.id, tag)
         .then(() => {
-          refresh();
+          refresh(id);
         })
         .catch((err) => {
           console.log(err);
@@ -66,11 +68,15 @@ export default function RepositoryPage() {
     }
   };
 
-  const page_name = repository ? repository.name : id;
+  // const page_name = repository ? repository.name : id;
+
+  if (!id) {
+    return <div>no id!!!</div>;
+  }
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={() => refresh(id)} isRefresh={loading}>
         <IconRegistry /> Repository info
       </PageTitle>
 

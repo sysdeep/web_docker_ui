@@ -1,5 +1,4 @@
-import { ApiInfoModel } from '../../services/info_service';
-import React from 'react';
+import { ApiInfoModel } from "../../services/info_service";
 
 interface SwarmFrameProps {
   info: ApiInfoModel;

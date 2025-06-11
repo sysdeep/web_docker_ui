@@ -1,14 +1,10 @@
-import PageTitle from '../../components/page_title';
-import React, { useEffect, useMemo, useState } from 'react';
-import TotalReport from './total_report';
-import {
-  ApiSecretListModel,
-  SecretsService,
-} from '../../services/secrets_service';
-import IconSecrets from '../../components/icon_secrets';
-import SecretsTable from './secrets_table';
-import { useConfiguration } from '@src/store/configuration';
-import ButtonRefresh from '@src/components/button_refresh';
+import PageTitle from "../../components/page_title";
+import { useEffect, useMemo, useState } from "react";
+import TotalReport from "./total_report";
+import { ApiSecretListModel, SecretsService } from "../../services/secrets_service";
+import IconSecrets from "../../components/icon_secrets";
+import SecretsTable from "./secrets_table";
+import { useConfiguration } from "@src/store/configuration";
 
 export default function SecretsPage() {
   const { configuration } = useConfiguration();
@@ -33,7 +29,7 @@ export default function SecretsPage() {
   };
 
   useEffect(() => {
-    console.log('page secrets mounted');
+    console.log("page secrets mounted");
     refresh();
   }, []);
 
@@ -50,13 +46,9 @@ export default function SecretsPage() {
 
   return (
     <div>
-      <PageTitle>
+      <PageTitle onRefresh={refresh} isRefresh={loading}>
         <IconSecrets /> Secrets
       </PageTitle>
-
-      <div>
-        <ButtonRefresh on_refresh={refresh} loading={loading} />
-      </div>
 
       {/* // TODO //{' '} */}
       {/* <div>
