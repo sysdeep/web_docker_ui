@@ -1,13 +1,16 @@
 import ButtonRefresh from "@src/components/button_refresh";
-import ContainersService, { ApiContainerResponseModel, ContainerTopModel } from "@src/services/containers_service";
+import { ApiContainerResponseModel, ContainerTopModel, useContainersService } from "@src/services/containers_service";
+import { useConfiguration } from "@src/store/configurationContext";
 import { useEffect, useState } from "react";
 
 type StatsFrameProps = {
   container: ApiContainerResponseModel | null;
-  containers_service: ContainersService;
 };
 
-export default function StatsFrame({ container, containers_service }: StatsFrameProps) {
+export default function StatsFrame({ container }: StatsFrameProps) {
+  const { base_url } = useConfiguration();
+  const { get_container_stats } = useContainersService(base_url);
+
   // state --------------------------------------------------------------------
   const [loading, setLoading] = useState<boolean>(false);
   const [containerTop, setContainerTop] = useState<ContainerTopModel | null>(null);
@@ -15,8 +18,7 @@ export default function StatsFrame({ container, containers_service }: StatsFrame
   const refresh_stats = () => {
     if (container && container.state.status === "running") {
       setLoading(true);
-      containers_service
-        .get_container_stats(container.container.id)
+      get_container_stats(container.container.id)
         .then(setContainerTop)
         .catch((err) => console.log(err))
         .finally(() => setLoading(false));

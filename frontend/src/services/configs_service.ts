@@ -1,36 +1,35 @@
-import { join_url } from '@src/routes';
+import { join_url } from "@src/routes";
 
-export class ConfigsServices {
-  private base_url: string;
-
-  constructor(base_url: string) {
-    this.base_url = base_url;
-    console.log('configs service created');
-  }
-
-  async get_configs(): Promise<ApiConfigListModel[]> {
-    const response = await fetch(join_url(this.base_url, '/api/configs'));
+export function useConfigsServices(base_url: string) {
+  async function get_configs(): Promise<ApiConfigListModel[]> {
+    const response = await fetch(join_url(base_url, "/api/configs"));
 
     const data = (await response.json()) as ApiConfigsListModel;
 
     return data.configs || [];
   }
 
-  async get_config(id: string): Promise<ApiFullConfigModel> {
-    const response = await fetch(join_url(this.base_url, '/api/configs/' + id));
+  async function get_config(id: string): Promise<ApiFullConfigModel> {
+    const response = await fetch(join_url(base_url, "/api/configs/" + id));
 
     const data = (await response.json()) as ApiFullConfigModel;
 
     return data;
   }
 
-  async remove_config(id: string): Promise<void> {
-    await fetch(join_url(this.base_url, '/api/configs/' + id), {
-      method: 'DELETE',
+  async function remove_config(id: string): Promise<void> {
+    await fetch(join_url(base_url, "/api/configs/" + id), {
+      method: "DELETE",
     });
 
     return;
   }
+
+  return {
+    get_config,
+    get_configs,
+    remove_config,
+  };
 }
 
 // list models ----------------------------------------------------------------

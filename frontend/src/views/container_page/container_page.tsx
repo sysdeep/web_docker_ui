@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import StatusFrame from "./status_frame";
 import PageTitle from "../../components/page_title";
-import ContainersService, { ApiContainerResponseModel } from "../../services/containers_service";
+import { ApiContainerResponseModel, useContainersService } from "../../services/containers_service";
 import DetailsFrame from "./details_frame";
 import VolumesFrame from "./volumes_frame";
 import NetworksFrame from "./networks_frame";
@@ -16,19 +16,15 @@ import { useConfiguration } from "@src/store/configurationContext";
 export default function ContainerPage() {
   const { id } = useParams();
   const { base_url } = useConfiguration();
+  const { get_container, container_action } = useContainersService(base_url);
   const navigate = useNavigate();
-
-  const containers_service = useMemo(() => {
-    return new ContainersService(base_url);
-  }, []);
 
   const [container, setContainer] = useState<ApiContainerResponseModel | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = (uid: string) => {
     setLoading(true);
-    containers_service
-      .get_container(uid)
+    get_container(uid)
       .then((data) => {
         setContainer(data);
         // refresh_top();
@@ -50,7 +46,7 @@ export default function ContainerPage() {
 
   const on_action = (action: string) => {
     if (id) {
-      containers_service.container_action(id, action).then(() => {
+      container_action(id, action).then(() => {
         if (action === "remove") {
           navigate(route.containers);
         } else {
@@ -93,9 +89,9 @@ export default function ContainerPage() {
           </ul>
         </div>
 
-        <TopFrame container={container} containers_service={containers_service} />
+        <TopFrame container={container} />
         {/* TODO: not ready */}
-        {/* <StatsFrame container={container} containers_service={containers_service} /> */}
+        {/* <StatsFrame container={container}  /> */}
 
         <DetailsFrame container={container} />
         <NetworksFrame container={container} />

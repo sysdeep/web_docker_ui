@@ -1,7 +1,7 @@
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ContainersFrame from "./containers_frame";
-import ContainersService from "../../services/containers_service";
+import { useContainersService } from "../../services/containers_service";
 import TotalReport from "./total_report";
 import IconContainers from "../../components/icon_containers";
 import { ApiContainerListModel } from "@src/models/api_container_list_model";
@@ -9,9 +9,7 @@ import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ContainersPage() {
   const { base_url } = useConfiguration();
-  const containers_service = useMemo(() => {
-    return new ContainersService(base_url);
-  }, []);
+  const { get_containers } = useContainersService(base_url);
 
   const [containers, setContainers] = useState<ApiContainerListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,8 +17,7 @@ export default function ContainersPage() {
 
   const refresh = () => {
     setLoading(true);
-    containers_service
-      .get_containers()
+    get_containers()
       .then((containers) => {
         setContainers(containers);
       })

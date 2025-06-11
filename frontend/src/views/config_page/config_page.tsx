@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import DetailsFrame from "./detailes_frame";
-import { ApiFullConfigModel, ConfigsServices } from "../../services/configs_service";
+import { ApiFullConfigModel, useConfigsServices } from "../../services/configs_service";
 import IconConfigs from "../../components/icon_configs";
 import { route } from "../../routes";
 import { useConfiguration } from "@src/store/configurationContext";
@@ -11,16 +11,12 @@ export default function ConfigPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { base_url } = useConfiguration();
-
-  const config_service = useMemo(() => {
-    return new ConfigsServices(base_url);
-  }, []);
+  const { get_config, remove_config } = useConfigsServices(base_url);
 
   const [config, setConfig] = useState<ApiFullConfigModel | null>(null);
 
   const refresh = (uid: string) => {
-    config_service
-      .get_config(uid)
+    get_config(uid)
       .then((config) => {
         setConfig(config);
       })
@@ -38,8 +34,7 @@ export default function ConfigPage() {
 
   const on_remove = () => {
     if (config && id) {
-      config_service
-        .remove_config(id)
+      remove_config(id)
         .then(() => {
           console.log("remove ok");
           navigate(route.configs);

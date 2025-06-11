@@ -1,20 +1,13 @@
-import { join_url } from '@src/routes';
-import { ApiContainerListModel } from '@src/models/api_container_list_model';
+import { join_url } from "@src/routes";
+import { ApiContainerListModel } from "@src/models/api_container_list_model";
 
 interface ApiContainersListModel {
   containers: ApiContainerListModel[];
 }
 
-export default class ContainersService {
-  private base_url: string;
-
-  constructor(base_url: string) {
-    this.base_url = base_url;
-    console.log('containers_service created');
-  }
-
-  async get_containers(): Promise<ApiContainerListModel[]> {
-    const response = await fetch(join_url(this.base_url, '/api/containers'));
+export function useContainersService(base_url: string) {
+  async function get_containers(): Promise<ApiContainerListModel[]> {
+    const response = await fetch(join_url(base_url, "/api/containers"));
 
     const data = (await response.json()) as ApiContainersListModel;
 
@@ -31,38 +24,46 @@ export default class ContainersService {
   //   return;
   // }
 
-  async get_container(id: string): Promise<ApiContainerResponseModel> {
-    const response = await fetch(join_url(this.base_url, '/api/containers/' + id));
+  async function get_container(id: string): Promise<ApiContainerResponseModel> {
+    const response = await fetch(join_url(base_url, "/api/containers/" + id));
     const data = (await response.json()) as ApiContainerResponseModel;
     return data;
   }
 
-  async get_container_top(id: string): Promise<ContainerTopModel> {
-    const response = await fetch(join_url(this.base_url, '/api/container_top/' + id));
+  async function get_container_top(id: string): Promise<ContainerTopModel> {
+    const response = await fetch(join_url(base_url, "/api/container_top/" + id));
     const data = (await response.json()) as ContainerTopResponse;
     return data.top;
   }
 
-  async get_container_stats(id: string): Promise<ContainerTopModel> {
-    const response = await fetch(join_url(this.base_url, '/api/container_stats/' + id));
+  async function get_container_stats(id: string): Promise<ContainerTopModel> {
+    const response = await fetch(join_url(base_url, "/api/container_stats/" + id));
     console.log(response.json());
     const data = (await response.json()) as ContainerTopResponse;
     return data.top;
   }
 
-  async container_action(id: string, action: string): Promise<void> {
+  async function container_action(id: string, action: string): Promise<void> {
     const send_data = {
       id: id,
       action: action,
     };
-    await fetch(join_url(this.base_url, '/api/container_action'), {
-      method: 'POST',
+    await fetch(join_url(base_url, "/api/container_action"), {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        "Content-Type": "application/json;charset=utf-8",
       },
       body: JSON.stringify(send_data),
     });
   }
+
+  return {
+    get_container,
+    get_containers,
+    get_container_stats,
+    get_container_top,
+    container_action,
+  };
 }
 
 interface ApiContainerModel {
@@ -112,13 +113,13 @@ export interface ApiContainerResponseModel {
 }
 
 export const ContainerAction: { [id: string]: string } = {
-  start: 'start',
-  stop: 'stop',
-  kill: 'kill',
-  restart: 'restart',
-  pause: 'pause',
-  resume: 'resume',
-  remove: 'remove',
+  start: "start",
+  stop: "stop",
+  kill: "kill",
+  restart: "restart",
+  pause: "pause",
+  resume: "resume",
+  remove: "remove",
 };
 
 // container top --------------------------------------------------------------

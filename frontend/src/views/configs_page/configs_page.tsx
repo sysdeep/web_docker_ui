@@ -1,25 +1,21 @@
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import TotalReport from "./total_report";
-import { ApiConfigListModel, ConfigsServices } from "../../services/configs_service";
+import { ApiConfigListModel, useConfigsServices } from "../../services/configs_service";
 import IconConfigs from "../../components/icon_configs";
 import ConfigsTable from "./configs_table";
 import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ConfigsPage() {
   const { base_url } = useConfiguration();
-
-  const configs_service = useMemo(() => {
-    return new ConfigsServices(base_url);
-  }, []);
+  const { get_configs, remove_config } = useConfigsServices(base_url);
 
   const [configs, setConfigs] = useState<ApiConfigListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = () => {
     setLoading(true);
-    configs_service
-      .get_configs()
+    get_configs()
       .then((configs: ApiConfigListModel[]) => {
         setConfigs(configs);
       })
@@ -35,8 +31,7 @@ export default function ConfigsPage() {
   }, []);
 
   const on_remove = (id: string) => {
-    configs_service
-      .remove_config(id)
+    remove_config(id)
       .then(() => {
         refresh();
       })
