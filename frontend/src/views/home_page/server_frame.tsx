@@ -4,10 +4,10 @@ import { format_size } from "../../utils/humanize";
 import IconContainers from "../../components/icon_containers";
 import { route } from "../../routes";
 
-interface ServerFrameProps {
+type Props = {
   info: ApiInfoModel;
-}
-export default function ServerFrame({ info }: ServerFrameProps) {
+};
+export default function ServerFrame({ info }: Props) {
   let networks_view = null;
   if (info.system.default_addresses_pools) {
     networks_view = info.system.default_addresses_pools.map((pool, idx) => {
@@ -18,7 +18,6 @@ export default function ServerFrame({ info }: ServerFrameProps) {
       );
     });
   }
-  console.log(info.system.default_addresses_pools);
   return (
     <div className='card mb-2'>
       <div className='card-body'>

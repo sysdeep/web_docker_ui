@@ -1,13 +1,14 @@
 import { ApiInfoModel } from "../../services/info_service";
 
-interface SwarmFrameProps {
+type Props = {
   info: ApiInfoModel;
-}
-export default function SwarmFrame({ info }: SwarmFrameProps) {
+};
+
+export default function SwarmFrame({ info }: Props) {
   return (
     <div className='card mb-2'>
       <div className='card-body'>
-        <h2>Sawrm</h2>
+        <h2>Swarm</h2>
 
         <table className='table table-sm'>
           <tbody>

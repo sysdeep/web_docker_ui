@@ -1,4 +1,4 @@
-import { join_url } from '@src/routes';
+import { join_url } from "@src/routes";
 
 interface ApiSwarmInfo {
   node_id: string;
@@ -37,27 +37,15 @@ export interface ApiInfoModel {
   system: ApiSystemModel;
 }
 
-export default class InfoService {
-  private base_url: string;
-  constructor(base_url: string) {
-    this.base_url = base_url;
-    console.log('volumes_service created');
-  }
-
-  async get_info(): Promise<ApiInfoModel> {
-    const response = await fetch(join_url(this.base_url, '/api/info'));
+export function useInfoService(base_url: string) {
+  const get_info = async (): Promise<ApiInfoModel> => {
+    const response = await fetch(join_url(base_url, "/api/info"));
     if (!response.ok) {
       throw new Error((await response.json()).message);
     }
     const data = (await response.json()) as ApiInfoModel;
     return data;
-  }
+  };
 
-  // async remove_image(id: string): Promise<void> {
-  //   await fetch('http://localhost:1313/api/images/' + id, {
-  //     method: 'DELETE',
-  //   });
-
-  //   return;
-  // }
+  return { get_info };
 }

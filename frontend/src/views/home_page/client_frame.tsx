@@ -1,10 +1,10 @@
 import { ApiInfoModel } from "../../services/info_service";
 
-interface ClientFrameProps {
+type Props = {
   info: ApiInfoModel;
-}
+};
 
-export default function ClientFrame({ info }: ClientFrameProps) {
+export default function ClientFrame({ info }: Props) {
   return (
     <div className='card mb-2'>
       <div className='card-body'>
