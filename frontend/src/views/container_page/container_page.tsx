@@ -8,18 +8,18 @@ import DetailsFrame from "./details_frame";
 import VolumesFrame from "./volumes_frame";
 import NetworksFrame from "./networks_frame";
 import IconContainers from "../../components/icon_containers";
-import { useConfiguration } from "@src/store/configuration";
 import TopFrame from "./top_frame";
 import { route } from "@src/routes";
 import { strip_container_name } from "@src/utils/containers";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ContainerPage() {
   const { id } = useParams();
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
   const navigate = useNavigate();
 
   const containers_service = useMemo(() => {
-    return new ContainersService(configuration.base_url);
+    return new ContainersService(base_url);
   }, []);
 
   const [container, setContainer] = useState<ApiContainerResponseModel | null>(null);

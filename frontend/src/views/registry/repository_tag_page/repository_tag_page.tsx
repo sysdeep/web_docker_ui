@@ -1,6 +1,5 @@
 import PageTitle from "@src/components/page_title";
 import { RegistryService, RepositoryModel, TagManifest } from "@src/services/registry_service";
-import { useConfiguration } from "@src/store/configuration";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DetailsFrame from "./details_frame";
@@ -8,15 +7,16 @@ import RepositoryNavFrame from "../components/reposytory_nav_frame";
 import ButtonRemove from "@src/components/button_remove";
 import { join_url, route } from "@src/routes";
 import IconRegistry from "@src/components/icon_registry";
+import { useConfiguration } from "@src/store/configurationContext";
 // import RepositoryFrame from './repository_frame';
 
 export default function RepositoryTagPage() {
   const { id, tag } = useParams();
   const navigate = useNavigate();
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
 
   const registry_service = useMemo(() => {
-    return new RegistryService(configuration.base_url);
+    return new RegistryService(base_url);
   }, []);
 
   const [manifest, setManifest] = useState<TagManifest | null>();

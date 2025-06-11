@@ -6,12 +6,12 @@ import FilterPanel from "./filter_panel";
 import FilterModel from "./filter_model";
 import TotalReport from "./total_report";
 import IconImages from "../../components/icon_images";
-import { useConfiguration } from "@src/store/configuration";
 import useImagesService from "@src/services/useImagesService";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ImagesPage() {
-  const { configuration } = useConfiguration();
-  const { get_images, remove_image } = useImagesService(configuration.base_url);
+  const { base_url } = useConfiguration();
+  const { get_images, remove_image } = useImagesService(base_url);
 
   const [images, setImages] = useState<ImageListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);

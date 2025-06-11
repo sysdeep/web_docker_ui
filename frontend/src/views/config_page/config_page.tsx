@@ -5,15 +5,15 @@ import DetailsFrame from "./detailes_frame";
 import { ApiFullConfigModel, ConfigsServices } from "../../services/configs_service";
 import IconConfigs from "../../components/icon_configs";
 import { route } from "../../routes";
-import { useConfiguration } from "@src/store/configuration";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ConfigPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
 
   const config_service = useMemo(() => {
-    return new ConfigsServices(configuration.base_url);
+    return new ConfigsServices(base_url);
   }, []);
 
   const [config, setConfig] = useState<ApiFullConfigModel | null>(null);

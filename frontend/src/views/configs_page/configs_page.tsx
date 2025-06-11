@@ -4,13 +4,13 @@ import TotalReport from "./total_report";
 import { ApiConfigListModel, ConfigsServices } from "../../services/configs_service";
 import IconConfigs from "../../components/icon_configs";
 import ConfigsTable from "./configs_table";
-import { useConfiguration } from "@src/store/configuration";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ConfigsPage() {
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
 
   const configs_service = useMemo(() => {
-    return new ConfigsServices(configuration.base_url);
+    return new ConfigsServices(base_url);
   }, []);
 
   const [configs, setConfigs] = useState<ApiConfigListModel[]>([]);

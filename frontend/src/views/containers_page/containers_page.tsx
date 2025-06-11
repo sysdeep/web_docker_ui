@@ -4,13 +4,13 @@ import ContainersFrame from "./containers_frame";
 import ContainersService from "../../services/containers_service";
 import TotalReport from "./total_report";
 import IconContainers from "../../components/icon_containers";
-import { useConfiguration } from "@src/store/configuration";
 import { ApiContainerListModel } from "@src/models/api_container_list_model";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ContainersPage() {
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
   const containers_service = useMemo(() => {
-    return new ContainersService(configuration.base_url);
+    return new ContainersService(base_url);
   }, []);
 
   const [containers, setContainers] = useState<ApiContainerListModel[]>([]);

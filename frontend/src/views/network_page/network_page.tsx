@@ -5,16 +5,16 @@ import DetailsFrame from "./detailes_frame";
 import { ApiFullNetworkModel, NetworksService } from "../../services/networks_service";
 import IconNetworks from "../../components/icon_networks";
 import ContainersFrame from "./containers_frame";
-import { useConfiguration } from "@src/store/configuration";
 import { route } from "@src/routes";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function NetworkPage() {
   const { id } = useParams();
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
   const navigate = useNavigate();
 
   const network_service = useMemo(() => {
-    return new NetworksService(configuration.base_url);
+    return new NetworksService(base_url);
   }, []);
 
   const [network, setNetwork] = useState<ApiFullNetworkModel | null>(null);

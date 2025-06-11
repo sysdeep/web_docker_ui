@@ -4,12 +4,12 @@ import TotalReport from "./total_report";
 import { ApiSecretListModel, SecretsService } from "../../services/secrets_service";
 import IconSecrets from "../../components/icon_secrets";
 import SecretsTable from "./secrets_table";
-import { useConfiguration } from "@src/store/configuration";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function SecretsPage() {
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
   const secrets_service = useMemo(() => {
-    return new SecretsService(configuration.base_url);
+    return new SecretsService(base_url);
   }, []);
 
   const [secrets, setSecrets] = useState<ApiSecretListModel[]>([]);

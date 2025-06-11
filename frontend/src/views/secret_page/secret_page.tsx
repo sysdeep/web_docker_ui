@@ -5,15 +5,15 @@ import DetailsFrame from "./detailes_frame";
 import { ApiFullSecretModel, SecretsService } from "../../services/secrets_service";
 import IconSecrets from "../../components/icon_secrets";
 import { route } from "@src/routes";
-import { useConfiguration } from "@src/store/configuration";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function SecretPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
 
   const secret_service = useMemo(() => {
-    return new SecretsService(configuration.base_url);
+    return new SecretsService(base_url);
   }, []);
 
   const [secret, setSecret] = useState<ApiFullSecretModel | null>(null);

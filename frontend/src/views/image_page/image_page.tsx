@@ -7,14 +7,14 @@ import ContainersFrame from "./containers_frame";
 import HistoryFrame from "./history_frame";
 import { ApiFullImageModel } from "../../services/images_service";
 import { route } from "@src/routes";
-import { useConfiguration } from "@src/store/configuration";
 import useImagesService from "@src/services/useImagesService";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ImagePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { configuration } = useConfiguration();
-  const { get_image, remove_image } = useImagesService(configuration.base_url);
+  const { base_url } = useConfiguration();
+  const { get_image, remove_image } = useImagesService(base_url);
 
   const [image, setImage] = useState<ApiFullImageModel | null>(null);
   const [loading, setLoading] = useState<boolean>(false);

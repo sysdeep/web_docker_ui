@@ -4,12 +4,12 @@ import PageTitle from "../../components/page_title";
 import { useEffect, useMemo, useState } from "react";
 import VolumesTable from "./volumes_table";
 import TotalReport from "./total_report";
-import { useConfiguration } from "@src/store/configuration";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function VolumesPage() {
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
   const volumes_service = useMemo(() => {
-    return new VolumesService(configuration.base_url);
+    return new VolumesService(base_url);
   }, []);
 
   const [volumes, setVolumes] = useState<ApiVolumeListModel[]>([]);

@@ -1,17 +1,17 @@
 import PageTitle from "@src/components/page_title";
 import { join_url, route } from "@src/routes";
 import { RegistryAction, RegistryService, RepositoryListModel } from "@src/services/registry_service";
-import { useConfiguration } from "@src/store/configuration";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ActionsBar from "../components/actions_bar";
 import IconRegistry from "@src/components/icon_registry";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function RepositoriesPage() {
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
 
   const registry_service = useMemo(() => {
-    return new RegistryService(configuration.base_url);
+    return new RegistryService(base_url);
   }, []);
 
   const [repositories, setRepositories] = useState<RepositoryListModel[]>([]);

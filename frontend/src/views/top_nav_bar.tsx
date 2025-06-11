@@ -9,10 +9,10 @@ import IconHome from "../components/icon_home";
 import { route } from "../routes";
 import IconRegistry from "@src/components/icon_registry";
 import IconServices from "@src/components/icon_services";
-import { useConfiguration } from "@src/store/configuration";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function TopNavBar() {
-  const { configuration } = useConfiguration();
+  const { use_registry, version } = useConfiguration();
 
   return (
     <nav className='navbar navbar-expand-lg bg-body-tertiary'>
@@ -74,7 +74,7 @@ export default function TopNavBar() {
                 <IconServices /> Services
               </Link>
             </li>
-            {configuration.use_registry && (
+            {use_registry && (
               <li className='nav-item'>
                 <Link to={route.registry_repositories} className='nav-link'>
                   <IconRegistry /> Registry
@@ -84,7 +84,7 @@ export default function TopNavBar() {
           </ul>
 
           {/* version */}
-          <span className='navbar-text'>v {configuration.version}</span>
+          <span className='navbar-text'>v {version}</span>
         </div>
       </div>
     </nav>

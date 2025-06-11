@@ -5,17 +5,17 @@ import DetailsFrame from "./detailes_frame";
 import VolumesService, { ApiFullVolumeModel } from "../../services/volumes_service";
 import IconVolumes from "../../components/icon_volumes";
 import { route } from "@src/routes";
-import { useConfiguration } from "@src/store/configuration";
 import ContainersFrame from "./containers_frame";
 import ButtonRemove from "@src/components/button_remove";
+import { useConfiguration } from "@src/store/configurationContext";
 
 export default function VolumePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { configuration } = useConfiguration();
+  const { base_url } = useConfiguration();
 
   const volume_service = useMemo(() => {
-    return new VolumesService(configuration.base_url);
+    return new VolumesService(base_url);
   }, []);
 
   const [volume, setVolume] = useState<ApiFullVolumeModel | null>(null);
