@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import DetailsFrame from "./detailes_frame";
-import { ApiFullSecretModel, SecretsService } from "../../services/secrets_service";
+import { ApiFullSecretModel, useSecretsService } from "../../services/secrets_service";
 import IconSecrets from "../../components/icon_secrets";
 import { route } from "@src/routes";
 import { useConfiguration } from "@src/store/configurationContext";
@@ -11,16 +11,12 @@ export default function SecretPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { base_url } = useConfiguration();
-
-  const secret_service = useMemo(() => {
-    return new SecretsService(base_url);
-  }, []);
+  const { get_secret, remove_secret } = useSecretsService(base_url);
 
   const [secret, setSecret] = useState<ApiFullSecretModel | null>(null);
 
   const refresh = (uid: string) => {
-    secret_service
-      .get_secret(uid)
+    get_secret(uid)
       .then((secret) => {
         setSecret(secret);
       })
@@ -37,8 +33,7 @@ export default function SecretPage() {
 
   const on_remove = () => {
     if (secret && id) {
-      secret_service
-        .remove_secret(id)
+      remove_secret(id)
         .then(() => {
           console.log("remove ok");
           navigate(route.secrets);

@@ -1,25 +1,21 @@
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import NetworksTable from "./networks_table";
 import TotalReport from "./total_report";
-import { ApiNetworkListModel, NetworksService } from "../../services/networks_service";
+import { ApiNetworkListModel, useNetworksService } from "../../services/networks_service";
 import IconNetworks from "../../components/icon_networks";
 import { useConfiguration } from "@src/store/configurationContext";
 
 export default function NetworksPage() {
   const { base_url } = useConfiguration();
-
-  const networks_service = useMemo(() => {
-    return new NetworksService(base_url);
-  }, []);
+  const { get_networks, remove_network } = useNetworksService(base_url);
 
   const [networks, setNetworks] = useState<ApiNetworkListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = () => {
     setLoading(true);
-    networks_service
-      .get_networks()
+    get_networks()
       .then((networks: ApiNetworkListModel[]) => {
         setNetworks(networks);
       })
@@ -35,8 +31,7 @@ export default function NetworksPage() {
   }, []);
 
   const on_remove = (id: string) => {
-    networks_service
-      .remove_network(id)
+    remove_network(id)
       .then(() => {
         refresh();
       })

@@ -1,25 +1,22 @@
 import { useParams } from "react-router-dom";
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonRefresh from "@src/components/button_refresh";
 import IconServices from "@src/components/icon_services";
-import ServicesService from "@src/services/services_service";
 import { Service } from "@src/models/service";
 import { useConfiguration } from "@src/store/configurationContext";
+import { useServicesService } from "@src/services/services_service";
 
 export default function ServicePage() {
   const { id } = useParams();
   // const navigate = useNavigate();
   const { base_url } = useConfiguration();
-
-  const services_service = useMemo(() => {
-    return new ServicesService(base_url);
-  }, []);
+  const { get_service } = useServicesService(base_url);
 
   const [service, setService] = useState<Service | null>(null);
 
   const refresh = (uid: string) => {
-    services_service.get_service(uid).then(setService).catch(console.log);
+    get_service(uid).then(setService).catch(console.log);
   };
 
   // useEffect(() => {

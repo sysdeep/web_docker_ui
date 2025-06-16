@@ -1,25 +1,22 @@
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import TotalReport from "./total_report";
 import IconServices from "@src/components/icon_services";
-import ServicesService from "@src/services/services_service";
+import { useServicesService } from "@src/services/services_service";
 import ServicesTable from "./services_table";
 import { Service } from "@src/models/service";
 import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ServicesPage() {
   const { base_url } = useConfiguration();
-  const services_service = useMemo(() => {
-    return new ServicesService(base_url);
-  }, []);
+  const { get_services } = useServicesService(base_url);
 
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = () => {
     setLoading(true);
-    services_service
-      .get_services()
+    get_services()
       .then(setServices)
       .catch(console.log)
       .finally(() => setLoading(false));

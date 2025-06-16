@@ -1,43 +1,35 @@
-import { join_url } from '@src/routes';
+import { join_url } from "@src/routes";
 
-export class NetworksService {
-  private base_url: string;
-
-  constructor(base_url: string) {
-    this.base_url = base_url;
-    console.log('networks_service created');
-  }
-
-  async get_networks(): Promise<ApiNetworkListModel[]> {
-    const response = await fetch(join_url(this.base_url, '/api/networks'));
+export function useNetworksService(base_url: string) {
+  const get_networks = async (): Promise<ApiNetworkListModel[]> => {
+    const response = await fetch(join_url(base_url, "/api/networks"));
 
     const data = (await response.json()) as ApiNetworksListModel;
 
-    if (data.networks.length > 0) {
-      let net = await this.get_network(data.networks[0].id);
-      console.log(net);
-    }
-
     return data.networks || [];
-  }
+  };
 
-  async get_network(id: string): Promise<ApiFullNetworkModel> {
-    const response = await fetch(
-      join_url(this.base_url, '/api/networks/' + id),
-    );
+  const get_network = async (id: string): Promise<ApiFullNetworkModel> => {
+    const response = await fetch(join_url(base_url, "/api/networks/" + id));
 
     const data = (await response.json()) as ApiFullNetworkModel;
 
     return data;
-  }
+  };
 
-  async remove_network(id: string): Promise<void> {
-    await fetch(join_url(this.base_url, '/api/networks/' + id), {
-      method: 'DELETE',
+  const remove_network = async (id: string): Promise<void> => {
+    await fetch(join_url(base_url, "/api/networks/" + id), {
+      method: "DELETE",
     });
 
     return;
-  }
+  };
+
+  return {
+    get_network,
+    get_networks,
+    remove_network,
+  };
 }
 
 // list models ----------------------------------------------------------------

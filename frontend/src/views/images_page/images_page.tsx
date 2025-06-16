@@ -6,8 +6,8 @@ import FilterPanel from "./filter_panel";
 import FilterModel from "./filter_model";
 import TotalReport from "./total_report";
 import IconImages from "../../components/icon_images";
-import useImagesService from "@src/services/useImagesService";
 import { useConfiguration } from "@src/store/configurationContext";
+import { useImagesService } from "@src/services/images_service";
 
 export default function ImagesPage() {
   const { base_url } = useConfiguration();

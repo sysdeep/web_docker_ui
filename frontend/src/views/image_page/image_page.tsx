@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 import DetailsFrame from "./detailes_frame";
 import ContainersFrame from "./containers_frame";
 import HistoryFrame from "./history_frame";
-import { ApiFullImageModel } from "../../services/images_service";
+import { ApiFullImageModel, useImagesService } from "../../services/images_service";
 import { route } from "@src/routes";
-import useImagesService from "@src/services/useImagesService";
 import { useConfiguration } from "@src/store/configurationContext";
 
 export default function ImagePage() {

@@ -1,24 +1,21 @@
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import TotalReport from "./total_report";
-import { ApiSecretListModel, SecretsService } from "../../services/secrets_service";
+import { ApiSecretListModel, useSecretsService } from "../../services/secrets_service";
 import IconSecrets from "../../components/icon_secrets";
 import SecretsTable from "./secrets_table";
 import { useConfiguration } from "@src/store/configurationContext";
 
 export default function SecretsPage() {
   const { base_url } = useConfiguration();
-  const secrets_service = useMemo(() => {
-    return new SecretsService(base_url);
-  }, []);
+  const { get_secrets, remove_secret } = useSecretsService(base_url);
 
   const [secrets, setSecrets] = useState<ApiSecretListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const refresh = () => {
     setLoading(true);
-    secrets_service
-      .get_secrets()
+    get_secrets()
       .then((secrets: ApiSecretListModel[]) => {
         setSecrets(secrets);
       })
@@ -34,8 +31,7 @@ export default function SecretsPage() {
   }, []);
 
   const on_remove = (id: string) => {
-    secrets_service
-      .remove_secret(id)
+    remove_secret(id)
       .then(() => {
         refresh();
       })

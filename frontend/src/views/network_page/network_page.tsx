@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import PageTitle from "../../components/page_title";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import DetailsFrame from "./detailes_frame";
-import { ApiFullNetworkModel, NetworksService } from "../../services/networks_service";
+import { ApiFullNetworkModel, useNetworksService } from "../../services/networks_service";
 import IconNetworks from "../../components/icon_networks";
 import ContainersFrame from "./containers_frame";
 import { route } from "@src/routes";
@@ -11,17 +11,13 @@ import { useConfiguration } from "@src/store/configurationContext";
 export default function NetworkPage() {
   const { id } = useParams();
   const { base_url } = useConfiguration();
+  const { get_network, remove_network } = useNetworksService(base_url);
   const navigate = useNavigate();
-
-  const network_service = useMemo(() => {
-    return new NetworksService(base_url);
-  }, []);
 
   const [network, setNetwork] = useState<ApiFullNetworkModel | null>(null);
 
   const refresh = (uid: string) => {
-    network_service
-      .get_network(uid)
+    get_network(uid)
       .then((network) => {
         setNetwork(network);
       })
@@ -38,8 +34,7 @@ export default function NetworkPage() {
   }, []);
 
   const on_remove = (uid: string) => {
-    network_service
-      .remove_network(uid)
+    remove_network(uid)
       .then(() => {
         navigate(route.networks);
       })
