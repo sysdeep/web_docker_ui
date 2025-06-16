@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ApiNetworkListModel } from "../../services/networks_service";
 import { route, join_url } from "../../routes";
 import IconRemove from "@src/components/icon_remove";
+import { format_date } from "@src/utils/humanize";
 
 interface NetworksTableProps {
   networks: ApiNetworkListModel[];

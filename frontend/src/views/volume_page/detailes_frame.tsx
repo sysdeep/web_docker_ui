@@ -1,3 +1,4 @@
+import { format_date } from "@src/utils/humanize";
 import { ApiFullVolumeModel } from "../../services/volumes_service";
 
 interface DetailsFrameProps {
@@ -17,7 +18,7 @@ export default function DetailsFrame({ volume }: DetailsFrameProps) {
             </tr>
             <tr>
               <td>Created</td>
-              <td>{volume.volume.created}</td>
+              <td>{format_date(volume.volume.created)}</td>
             </tr>
             <tr>
               <td>Mount path</td>

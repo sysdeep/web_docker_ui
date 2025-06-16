@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ApiVolumeListModel } from "../../services/volumes_service";
 import { route, join_url } from "../../routes";
 import IconRemove from "@src/components/icon_remove";
+import { format_date } from "@src/utils/humanize";
 
 interface VolumesTableProps {
   volumes: ApiVolumeListModel[];
@@ -39,11 +40,12 @@ export default function VolumesTable({ volumes, on_remove }: VolumesTableProps) 
         <td> {volume.stack_name} </td>
         <td> {volume.driver} </td>
         {/* <!-- <td> .Mountpoint </td> --> */}
-        <td> {volume.created} </td>
+        <td> {format_date(volume.created)} </td>
         {options_view()}
       </tr>
     );
   });
+
   return (
     <table className='table table-sm table-striped'>
       <thead>
