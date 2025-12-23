@@ -6,6 +6,11 @@ import TotalReport from "./total_report";
 import IconContainers from "../../components/icon_containers";
 import { ApiContainerListModel } from "@src/models/api_container_list_model";
 import { useConfiguration } from "@src/store/configurationContext";
+import ContainersFilter, { ContainersFilterModel } from "./containers_filter";
+
+const defaultFilter: ContainersFilterModel = {
+  status: "all",
+};
 
 export default function ContainersPage() {
   const { base_url } = useConfiguration();
@@ -13,7 +18,8 @@ export default function ContainersPage() {
 
   const [containers, setContainers] = useState<ApiContainerListModel[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  // const [filter, setFilter] = useState<FilterModel>({ dates: [] });
+
+  const [filterData, setFilterData] = useState<ContainersFilterModel>(defaultFilter);
 
   const refresh = () => {
     setLoading(true);
@@ -34,52 +40,27 @@ export default function ContainersPage() {
     refresh();
   }, []);
 
-  // const remove_image = (id: string) => {
-  //   console.log('remove', id);
+  const onFilter = (model: ContainersFilterModel) => {
+    setFilterData(model);
+  };
 
-  //   containers_service
-  //     .remove_image(id)
-  //     .then(() => {
-  //       refresh();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  // filter records
+  const filteredContainers = containers.filter((c) => {
+    if (filterData.status == "all") return true;
+    return c.state === filterData.status;
+  });
 
-  // const on_date = (date: string) => {
-  //   let result = [];
-  //   if (filter.dates.includes(date)) {
-  //     result = filter.dates.filter((d) => d !== date);
-  //   } else {
-  //     result = [...filter.dates, date];
-  //   }
-  //   setFilter({ ...filter, dates: result });
-  // };
-
+  // draw
   return (
     <div>
       <PageTitle onRefresh={refresh} isRefresh={loading}>
         <IconContainers /> Containers
       </PageTitle>
 
-      <ContainersFrame containers={containers} />
+      <ContainersFilter initial_filter={filterData} onChange={onFilter} />
+      <ContainersFrame containers={filteredContainers} />
 
-      <TotalReport total={containers.length} />
-      {/* <FilterPanel filter={filter} on_date={on_date} />
-      <div>
-        <span>loading: {loading}</span>
-        <button className='button' onClick={() => refresh()}>
-          Refresh
-        </button>
-      </div>
-      <ImagesTable
-        images={images}
-        filter={filter}
-        on_remove={remove_image}
-        on_date={on_date}
-      />
-       */}
+      <TotalReport filtered={filteredContainers.length} total={containers.length} />
     </div>
   );
 }
