@@ -10,6 +10,7 @@ import ContainersFilter, { ContainersFilterModel } from "./containers_filter";
 
 const defaultFilter: ContainersFilterModel = {
   status: "all",
+  search: "",
 };
 
 export default function ContainersPage() {
@@ -45,10 +46,17 @@ export default function ContainersPage() {
   };
 
   // filter records
-  const filteredContainers = containers.filter((c) => {
-    if (filterData.status == "all") return true;
-    return c.state === filterData.status;
-  });
+  const filteredContainers = containers
+    .filter((c) => {
+      if (filterData.status == "all") return true;
+      return c.state === filterData.status;
+    })
+    .filter((c) => {
+      if (filterData.search.length > 0) {
+        return c.name.toLocaleLowerCase().includes(filterData.search.toLocaleLowerCase());
+      }
+      return true;
+    });
 
   // draw
   return (

@@ -1,17 +1,20 @@
 # Todo
 
+## common
+
 - [ ] временные метки
   - [ ] networks - в другом формате `2025-06-16 10:02:34.24382724 +0300 MSK`
-- [ ] services page
-  - [ ] replicas - кол-во текущих
-  - [ ] удаление
-- [ ] service page
 
-  - [ ] удаление
+## services page
 
-- [ ] containers page
+- [ ] replicas - кол-во текущих
+- [ ] удаление
 
-  - [ ] sort table
-  - [ ] search
+## service page
 
-- [x] сервисы в виде классов не нужны, достаточно простых функций
+- [ ] удаление
+
+## containers page
+
+- [x] sort table
+- [x] search
