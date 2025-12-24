@@ -227,6 +227,17 @@ func (h *Api) GetContainer(c echo.Context) error {
 	return c.JSON(http.StatusOK, response)
 }
 
+func (h *Api) GetContainerInspect(c echo.Context) error {
+	container_id := c.Param("id")
+
+	inspect_data, err := h.docker_client.ContainerInspect(context.Background(), container_id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, inspect_data)
+}
+
 func make_container_model(data *types.ContainerJSONBase) containerModel {
 	return containerModel{
 		ID:           data.ID,

@@ -3,6 +3,9 @@ import { format_size } from "../../utils/humanize";
 import { Link } from "react-router-dom";
 import { route, join_url } from "../../routes";
 import IconRemove from "@src/components/icon_remove";
+import { useState } from "react";
+import { SortState } from "@src/data/sort_state";
+import IconSort from "@src/components/icon_sort";
 
 interface ImagesTableProps {
   on_remove(id: string): void;
@@ -10,18 +13,38 @@ interface ImagesTableProps {
   images: ImageListModel[];
 }
 
+const HEADER_SIZE = "size";
+const HEADER_CREATED = "created";
+
 export default function ImagesTable({ images, on_remove, on_date }: ImagesTableProps) {
-  // const data = [1, 2, 3];
+  const [sortHeader, setSortHeader] = useState<string>(HEADER_CREATED);
+  const [sortAsc, setSortAsc] = useState<boolean>(false);
 
-  // const [images, setImages] = useState<number[]>(data);
+  const onHeaderClick = (header: string) => {
+    if (sortHeader === header) {
+      return setSortAsc(!sortAsc);
+    }
 
-  // const on_remove = (uid: number) => {
-  //   console.log('on remove: ' + uid);
-  //   const new_images = images.filter((v: number) => v !== uid);
-  //   setImages(new_images);
-  // };
+    setSortHeader(header);
+  };
 
-  const rows = images.map((v: ImageListModel, idx: number) => {
+  const size_icon_state = makeSortState(HEADER_SIZE, sortHeader, sortAsc);
+  const created_icon_state = makeSortState(HEADER_CREATED, sortHeader, sortAsc);
+
+  const sort_k = sortAsc ? 1 : -1;
+  const sortedRecords = images.sort((a, b) => {
+    if (sortHeader === HEADER_SIZE) {
+      return (a.size > b.size ? 1 : -1) * sort_k;
+    }
+
+    if (sortHeader === HEADER_CREATED) {
+      return (a.created > b.created ? 1 : -1) * sort_k;
+    }
+
+    return 0;
+  });
+
+  const rows = sortedRecords.map((v: ImageListModel, idx: number) => {
     return (
       <TableRow
         uid={v.id}
@@ -36,12 +59,22 @@ export default function ImagesTable({ images, on_remove, on_date }: ImagesTableP
   });
 
   return (
-    <table className='table table-sm table-striped'>
+    <table className='table table-sm table-striped table-bordered'>
       <thead>
         <tr>
           <th>Tags</th>
-          <th>Size</th>
-          <th>Created</th>
+          <th role='button' onClick={() => onHeaderClick(HEADER_SIZE)}>
+            Size
+            <span style={{ float: "right" }}>
+              <IconSort state={size_icon_state} />
+            </span>
+          </th>
+          <th role='button' onClick={() => onHeaderClick(HEADER_CREATED)}>
+            Created
+            <span style={{ float: "right" }}>
+              <IconSort state={created_icon_state} />
+            </span>
+          </th>
           <th>Options</th>
         </tr>
       </thead>
@@ -104,4 +137,8 @@ function TableRow({ uid, tags, size, created, on_remove, on_date }: Props) {
       </td>
     </tr>
   );
+}
+
+function makeSortState(header_name: string, cur_header: string, cur_asc: boolean): SortState {
+  return cur_header === header_name ? (cur_asc ? SortState.asc : SortState.desc) : SortState.none;
 }

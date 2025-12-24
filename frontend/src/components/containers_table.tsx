@@ -57,7 +57,7 @@ export default function ContainersTable({ containers }: ContainersFrameProps) {
   });
 
   return (
-    <table className='table table-sm table-striped'>
+    <table className='table table-sm table-striped table-bordered'>
       <thead>
         <tr>
           <th role='button' onClick={() => onHeaderClick(HEADER_NAME)}>

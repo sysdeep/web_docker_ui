@@ -66,6 +66,7 @@ func NewWebserver(
 	// containers
 	e.GET("/api/containers", api_handlers.GetContainers)
 	e.GET("/api/containers/:id", api_handlers.GetContainer)
+	e.GET("/api/container_inspect/:id", api_handlers.GetContainerInspect)
 	e.GET("/api/container_top/:id", api_handlers.GetContainerTop)
 	e.GET("/api/container_stats/:id", api_handlers.GetContainerStats)
 	e.POST("/api/container_action", api_handlers.ContainerAction)

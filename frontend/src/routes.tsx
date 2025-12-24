@@ -21,11 +21,13 @@ import ServicesPage from "./views/services_page/services_page";
 import ServicePage from "./views/service_page/service_page";
 import RepositoriesSmartPage from "./views/registry/repositories_smart_page/repositories_smart_page";
 import RepositoriesPageTree from "./views/registry/repositories_page_tree/repositories_page_tree";
+import ContainerInspectPage from "./views/container_inspect_page/container_inspect_page";
 
 export const route = {
   image: "/image",
   images: "/images",
   container: "/container",
+  container_inspect: "/container_inspect",
   containers: "/containers",
   volume: "/volume",
   volumes: "/volumes",
@@ -72,6 +74,10 @@ export const routes = [
       {
         path: join_url(route.container, ":id"),
         element: <ContainerPage />,
+      },
+      {
+        path: join_url(route.container, ":id/inspect"),
+        element: <ContainerInspectPage />,
       },
       {
         path: route.images,

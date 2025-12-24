@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import StatusFrame from "./status_frame";
 import PageTitle from "../../components/page_title";
@@ -9,7 +9,7 @@ import VolumesFrame from "./volumes_frame";
 import NetworksFrame from "./networks_frame";
 import IconContainers from "../../components/icon_containers";
 import TopFrame from "./top_frame";
-import { route } from "@src/routes";
+import { join_url, route } from "@src/routes";
 import { strip_container_name } from "@src/utils/containers";
 import { useConfiguration } from "@src/store/configurationContext";
 
@@ -75,7 +75,8 @@ export default function ContainerPage() {
               <a href='/container/{container.container.id}/logs'>Logs TODO</a>
             </li>
             <li>
-              <a href='/container/{container.container.id}/inspect'>Inspect TODO</a>
+              <Link to={join_url(route.container, `${container.container.id}/inspect`)}>Inspect</Link>
+              {/* <a href={`/container/${container.container.id}/inspect`}>Inspect TODO</a> */}
             </li>
             <li>
               <a href='/container/{container.container.id}/stats'>Stats TODO</a>

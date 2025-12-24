@@ -30,6 +30,12 @@ export function useContainersService(base_url: string) {
     return data;
   }
 
+  async function get_container_inspect(id: string): Promise<any> {
+    const response = await fetch(join_url(base_url, "/api/container_inspect/" + id));
+    const data = await response.json();
+    return data;
+  }
+
   async function get_container_top(id: string): Promise<ContainerTopModel> {
     const response = await fetch(join_url(base_url, "/api/container_top/" + id));
     const data = (await response.json()) as ContainerTopResponse;
@@ -59,6 +65,7 @@ export function useContainersService(base_url: string) {
 
   return {
     get_container,
+    get_container_inspect,
     get_containers,
     get_container_stats,
     get_container_top,
